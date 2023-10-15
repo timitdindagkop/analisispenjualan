@@ -42,7 +42,7 @@
                                     <thead>
                                         <tr>
                                             <th width="5%">No</th>
-                                            <th width="10%">Kode barang</th>
+                                            <th width="10%">Suplier</th>
                                             <th width="20%">Nama barang</th>
                                             <th width="20%">Harga Kiloan</th>
                                             <th width="10%">Stok</th>
@@ -132,14 +132,14 @@
                     "targets": "_all",
                     "defaultContent": "-",
                     "render": function(data, type, row, meta){
-                    return row.kode_barang
+                    return row.suplier.nama_perusahaan
                     }
                 },
                 {
                     "targets": "_all",
                     "defaultContent": "-",
                     "render": function(data, type, row, meta){
-                    return row.nama_barang
+                    return row.kode_barang+` - `+row.nama_barang
                     }
                 },
                 {
@@ -169,7 +169,7 @@
                     "render": function(data, type, row, meta){
                     return `
                         <div class="btn-group">
-                            <button class="btn btn-sm btn-warning edit-barang" title="Edit data" data-id="`+row.id+`"><i class="mdi mdi mdi-account-edit-outline"></i></button>
+                            <button class="btn btn-sm btn-warning edit-barang" title="Edit data" data-id="`+row.id+`"><i class="mdi mdi mdi-file-document-edit-outline"></i></button>
                             <button class="btn btn-sm btn-danger hapusdata" title="Hapus data" data-id="`+row.id+`"><i class="mdi mdi mdi-delete-outline"></i></button>
                         </div>
                     `
@@ -200,6 +200,7 @@
                     $('#id').val(response.data.id);
                     $('#nama_barang').val(response.data.nama_barang);
                     $('#kode_barang').val(response.data.kode_barang);
+                    $('#suplier_id').val(response.data.suplier_id);
                     harga_beli.value = convertRupiah(response.data.harga_beli, "Rp. ");
                     harga_jual.value = convertRupiah(response.data.harga_jual, "Rp. ");
                     $('#stok_barang').val(response.data.stok_barang);

@@ -30,19 +30,22 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Data barang</h3>
+                        <div class="d-flex justify-content-between">
+                            <h3 class="card-title">Data Suplier</h3>
+                            <button class="btn btn-primary" id="tambah-suplier">+ Tambah Suplier</button>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-12">
-                                <table id="data-pembelianbarang" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                <table id="data-suplier" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                     <thead>
                                         <tr>
                                             <th width="5%">No</th>
-                                            <th width="15%">Kode Pembelian</th>
-                                            <th width="20%">Tanggal</th>
-                                            <th width="30%">Total Barang (Kiloan)</th>
-                                            <th width="30%">Total Uang</th>
+                                            <th width="20%">Kode</th>
+                                            <th width="20%">Nama Suplier</th>
+                                            <th width="15%">Telepon</th>
+                                            <th width="30%">Alamat</th>
                                             <th width="10%">#</th>
                                         </tr>
                                     </thead>
@@ -54,10 +57,13 @@
                     </div>
                 </div>
             </div>
+
         </div>
         <!-- End Row -->
+
     </div>
     <!-- end container-fluid -->
+    @include('master.suplier.modal_input')
 @endsection
 @push('js')
     
@@ -67,28 +73,20 @@
     <script src="/assets/libs/datatables/dataTables.bootstrap4.min.js"></script>
     <script src="/assets/libs/datatables/dataTables.responsive.min.js"></script>
     <script src="/assets/libs/datatables/responsive.bootstrap4.min.js"></script>
+    
     <script>
 
-        const rupiah = (number) => {
-            return new Intl.NumberFormat("id-ID", {
-            style: "decimal",
-            currency: "IDR"
-            }).format(number);
-        }
-
         // load data table
-        const table = $('#data-pembelianbarang').DataTable({          
+        const table = $('#data-suplier').DataTable({          
             "lengthMenu": [[5, 10, 25, 50, 100, -1],[5, 10, 25, 50, 100, 'All']],
             "pageLength": 10, 
             processing: true,
             serverSide: true,
             responseive: true,
             ajax: {
-                url:"{{ url('json_pb') }}",
+                url:"{{ url('json_sp') }}",
                 type:"POST",
-                data:function(d){
-                    d._token = "{{ csrf_token() }}"
-                }
+                data:function(d){d._token = "{{ csrf_token() }}"}
             },
             columns:[
                 {
@@ -102,28 +100,28 @@
                     "targets": "_all",
                     "defaultContent": "-",
                     "render": function(data, type, row, meta){
-                    return row.id
+                    return row.kode_perusahaan
                     }
                 },
                 {
                     "targets": "_all",
                     "defaultContent": "-",
                     "render": function(data, type, row, meta){
-                    return row.tanggal
+                    return row.nama_perusahaan
                     }
                 },
                 {
                     "targets": "_all",
                     "defaultContent": "-",
                     "render": function(data, type, row, meta){
-                    return row.total_barang
+                    return row.telepon
                     }
                 },
                 {
                     "targets": "_all",
                     "defaultContent": "-",
                     "render": function(data, type, row, meta){
-                    return 'Rp. '+rupiah(row.total_uang)
+                    return row.alamat
                     }
                 },
                 {
@@ -132,13 +130,83 @@
                     "render": function(data, type, row, meta){
                     return `
                         <div class="btn-group">
-                            <a href="{{ url('print_pb') }}/`+row.id+`" target="_blank" class="btn btn-sm btn-success edit-barang" title="Cetak laporan" data-id="`+row.id+`"><i class="mdi mdi mdi-printer"></i></a>
+                            <button class="btn btn-sm btn-warning edit-suplier" title="Edit data" data-id="`+row.id+`"><i class="mdi mdi mdi-file-document-edit-outline"></i></button>
                             <button class="btn btn-sm btn-danger hapusdata" title="Hapus data" data-id="`+row.id+`"><i class="mdi mdi mdi-delete-outline"></i></button>
                         </div>
                     `
                     }
                 },
             ]
+        });
+
+        $(document).on('click', '#tambah-suplier', function(e){
+            $('#judul_modal').text("Tambah data suplier");
+            $('#modal_input').modal('show');
+            $('#simpan').val('save');
+            $('#simpan').text("Simpan Data");
+            $('.input').removeClass('is-invalid');
+            document.getElementById("form_input").reset();
+        });
+
+        $(document).on('click', '.edit-suplier', function(e){
+            $('#judul_modal').text("Edit data suplier");
+            $('.input').removeClass('is-invalid');
+            let idedit = $(this).data('id');
+            $.ajax({
+                type: "GET",
+                url: "{{ route('sp.index') }}/"+ idedit,
+                success: function(response){
+                    $('#simpan').val("update");
+                    $('#simpan').text("Ubah Data");
+                    $('#id').val(response.data.id);
+                    $('#nama_perusahaan').val(response.data.nama_perusahaan);
+                    $('#kode_perusahaan').val(response.data.kode_perusahaan);
+                    $('#alamat').val(response.data.alamat);
+                    $('#telepon').val(response.data.telepon);
+                    $('#modal_input').modal('show');
+                },
+                error: function(err){
+                    Swal.fire({
+                        type:"error",
+                        title:"Maaf...",
+                        text: err.responseJSON.message,
+                        confirmButtonColor:"#348cd4",
+                    });
+                }
+            })
+        })
+
+        $(document).on('click', '#simpan', function(e){
+            $('.input').removeClass('is-invalid');
+            let url = "";
+            let type = "";
+            if($(this).val() == 'save'){
+                url = "{{ route('sp.index') }}"
+                type = "POST";
+            }
+            if($(this).val() == 'update'){
+                let idupdate = $("#id").val();
+                url = "{{ route('sp.index') }}/"+idupdate;
+                type = "PATCH";
+            }
+            $.ajax({
+                type: type,
+                url: url,
+                data: $("#form_input").serialize(),
+                dataType: 'json',
+                success: function(response){
+                    Swal.fire({title:"Selamat!",text:response.message,type:"success",confirmButtonColor:"#348cd4"})
+                    table.ajax.reload();
+                    document.getElementById("form_input").reset();
+                    $('#modal_input').modal('hide');
+                },
+                error: function(err) {
+                    let error = err.responseJSON;
+                    $.each(error.errors, function(key, value){
+                        $('#'+key).addClass('is-invalid');
+                    })
+                }
+            })
         });
 
         // belum fix
@@ -156,7 +224,7 @@
                 if (result.value) {
                     $.ajax({
                         type: "DELETE",
-                        url: "{{ route('pb.index') }}/" + idhapus,
+                        url: "{{ route('sp.index') }}/" + idhapus,
                         data: {'_token': '{{ csrf_token() }}'},
                         dataType: 'json',
                         success: function(response) {
@@ -164,7 +232,6 @@
                             table.ajax.reload();
                         }
                     });
-
                 }
             })
         });

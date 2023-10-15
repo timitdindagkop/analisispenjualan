@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDetailPembelianBarangsTable extends Migration
+class CreateDetailPenjualanBarangsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,18 @@ class CreateDetailPembelianBarangsTable extends Migration
      */
     public function up()
     {
-        Schema::create('detail_pembelian_barangs', function (Blueprint $table) {
+        Schema::create('detail_penjualan_barangs', function (Blueprint $table) {
             $table->id();
-            $table->uuid('pembelianbarang_id')->index();
+            $table->uuid('penjualanbarang_id')->index();
             $table->uuid('barang_id')->index();
             $table->string('jumlah');
             $table->string('harga');
+            $table->string('status_cicilan')->default('tidak');
+            $table->string('jumlah_cicilan')->default(0);
+            $table->string('dp_cicilan')->default(0);
             $table->timestamps();
 
-            $table->foreign('pembelianbarang_id')->references('id')->on('pembelian_barangs')->onDelete('cascade');
+            $table->foreign('penjualanbarang_id')->references('id')->on('penjualan_barangs')->onDelete('cascade');
             $table->foreign('barang_id')->references('id')->on('barangs')->onDelete('cascade');
         });
     }
@@ -33,6 +36,6 @@ class CreateDetailPembelianBarangsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('detail_pembelian_barangs');
+        Schema::dropIfExists('detail_penjualan_barangs');
     }
 }

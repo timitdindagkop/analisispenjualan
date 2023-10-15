@@ -68,10 +68,7 @@ class PembeliController extends Controller
         $pembeli->telepon = $request->telepon;
         $pembeli->alamat = $request->alamat;
         $pembeli->save();
-        return response()->json([
-            'status' => 200,
-            'message' => 'Pembeli baru berhasil di buat',
-        ]);
+        return response()->json(['message' => 'Pembeli baru berhasil di buat']);
     }
 
     public function show($id)
@@ -95,10 +92,7 @@ class PembeliController extends Controller
             $update_pembeli->telepon = $request->telepon;
             $update_pembeli->alamat = $request->alamat;
             $update_pembeli->update();
-            return response()->json([
-                'status' => 200,
-                'message' => 'Pembeli berhasil di ubah',
-            ]);
+            return response()->json(['message' => 'Pembeli berhasil di ubah']);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Data pembeli tidak ditemukan'], 404);
         }
@@ -107,9 +101,6 @@ class PembeliController extends Controller
     public function destroy($id)
     {
         Pembeli::destroy($id);
-        return response()->json([
-            'status' => 200,
-            'message' => 'Pembeli berhasil di hapus',
-        ]);
+        return response()->json(['message' => 'Pembeli berhasil di hapus']);
     }
 }

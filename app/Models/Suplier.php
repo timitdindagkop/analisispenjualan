@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Barang extends Model
+class Suplier extends Model
 {
     use HasFactory;
 
@@ -14,8 +14,11 @@ class Barang extends Model
     protected $primaryKey = 'id';
     public $incrementing = false;
 
-    public function suplier()
-    {
-        return $this->belongsTo(Suplier::class);
+    public function barang(){
+        return $this->hasMany(Barang::class);
+    }
+
+    public function pembelian_barang(){
+        return $this->hasMany(PembelianBarang::class);
     }
 }

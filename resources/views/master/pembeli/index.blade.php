@@ -132,7 +132,7 @@
                     "render": function(data, type, row, meta){
                     return `
                         <div class="btn-group">
-                            <button class="btn btn-sm btn-warning edit-pembeli" title="Edit data" data-id="`+row.id+`"><i class="mdi mdi mdi-account-edit-outline"></i></button>
+                            <button class="btn btn-sm btn-warning edit-pembeli" title="Edit data" data-id="`+row.id+`"><i class="mdi mdi mdi-file-document-edit-outline"></i></button>
                             <button class="btn btn-sm btn-danger hapusdata" title="Hapus data" data-id="`+row.id+`"><i class="mdi mdi mdi-delete-outline"></i></button>
                         </div>
                     `

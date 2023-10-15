@@ -13,4 +13,13 @@ class PembelianBarang extends Model
     
     protected $primaryKey = 'id';
     public $incrementing = false;
+
+    public function DetailPembelianBarang()
+    {
+        return $this->hasMany(DetailPembelianBarang::class);
+    }
+
+    public function suplier(){
+        return $this->belongsTo(Suplier::class);
+    }
 }

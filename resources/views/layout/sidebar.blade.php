@@ -39,6 +39,9 @@
                         <span class="menu-arrow"></span>
                     </a>
                     <ul class="nav-second-level" aria-expanded="false">
+                        @can('Owner')
+                            <li><a href="{{ route('sp.index') }}">Data Suplier</a></li>
+                        @endcan
                         <li><a href="{{ route('b.index') }}">Data Barang</a></li>
                         <li><a href="{{ route('pe.index') }}">Data Pembeli</a></li>
                     </ul>
@@ -76,6 +79,7 @@
                     <ul class="nav-second-level" aria-expanded="false">
                         <li><a href="mail-inbox.html">Laporan perCustomer</a></li>
                         <li><a href="mail-compose.html">Laporan Bulanan</a></li>
+                        <li><a href="mail-compose.html">Laba bersih</a></li>
                     </ul>
                 </li>
 

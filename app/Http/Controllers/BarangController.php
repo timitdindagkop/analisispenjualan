@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Barang;
+use App\Models\Suplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -14,13 +15,14 @@ class BarangController extends Controller
     {
         return view('master.barang.index', [
             'title' => 'Barang',
+            'suplier' => Suplier::select('id', 'nama_perusahaan')->get()
         ]);
     }
 
     public function json(){
-        $columns = ['id', 'kode_barang', 'nama_barang', 'harga_jual', 'harga_beli', 'stok_barang', 'keterangan' ];
+        $columns = ['id', 'suplier_id', 'kode_barang', 'nama_barang', 'harga_jual', 'harga_beli', 'stok_barang', 'keterangan' ];
         $orderBy = $columns[request()->input("order.0.column")];
-        $data = Barang::select('id', 'kode_barang', 'nama_barang', 'harga_jual', 'harga_beli', 'stok_barang', 'keterangan');
+        $data = Barang::with('suplier')->select('id', 'suplier_id', 'kode_barang', 'nama_barang', 'harga_jual', 'harga_beli', 'stok_barang', 'keterangan');
 
         if(request()->input("search.value")){
             $data = $data->where(function($query){
@@ -72,16 +74,14 @@ class BarangController extends Controller
         $barang = new Barang();
         $barang->id = Str::uuid()->toString();
         $barang->kode_barang = $request->kode_barang;
+        $barang->suplier_id = $request->suplier_id;
         $barang->nama_barang = $request->nama_barang;
         $barang->harga_beli = preg_replace('/[^0-9]/', '', $request->harga_beli);
         $barang->harga_jual = preg_replace('/[^0-9]/', '', $request->harga_jual);
         $barang->stok_barang = $request->stok_barang;
         $barang->keterangan = $request->keterangan;
         $barang->save();
-        return response()->json([
-            'status' => 200,
-            'message' => 'Barang baru berhasil di buat',
-        ]);
+        return response()->json(['message' => 'Barang baru berhasil di buat']);
     }
 
     public function show($id)
@@ -102,15 +102,13 @@ class BarangController extends Controller
             $update_barang = Barang::findOrFail($id);
             $update_barang->nama_barang = $request->nama_barang;
             $update_barang->kode_barang = $request->kode_barang;
+            $update_barang->suplier_id = $request->suplier_id;
             $update_barang->harga_beli = preg_replace('/[^0-9]/', '', $request->harga_beli);
             $update_barang->harga_jual = preg_replace('/[^0-9]/', '', $request->harga_jual);
             $update_barang->stok_barang = $request->stok_barang;
             $update_barang->keterangan = $request->keterangan;
             $update_barang->update();
-            return response()->json([
-                'status' => 200,
-                'message' => 'Barang berhasil di ubah',
-            ]);
+            return response()->json(['message' => 'Barang berhasil di ubah',]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Data barang tidak ditemukan'], 404);
         }
@@ -119,9 +117,6 @@ class BarangController extends Controller
     public function destroy($id)
     {
         Barang::destroy($id);
-        return response()->json([
-            'status' => 200,
-            'message' => 'Barang berhasil di hapus',
-        ]);
+        return response()->json(['message' => 'Barang berhasil di hapus']);
     }
 }

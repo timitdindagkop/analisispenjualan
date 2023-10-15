@@ -15,13 +15,17 @@ class CreateBarangsTable extends Migration
     {
         Schema::create('barangs', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('nama_barang');
+            $table->uuid('suplier_id')->index();
             $table->string('kode_barang')->unique();
+            $table->string('nama_barang');
             $table->string('harga_jual');
             $table->string('harga_beli');
             $table->string('stok_barang');
             $table->string('keterangan');
             $table->timestamps();
+
+            $table->foreign('suplier_id')->references('id')->on('supliers')->onDelete('cascade');
+
         });
     }
 

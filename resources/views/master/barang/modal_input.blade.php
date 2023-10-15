@@ -11,6 +11,15 @@
                     <input type="hidden" name="id" id="id">
                     <div class="form-group">
                         <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="suplier_id">Suplier</label>
+                                <select name="suplier_id" id="suplier_id" class="form-control">
+                                    <option selected disabled>Pilih Suplier</option>
+                                    @foreach ($suplier as $s)
+                                        <option value="{{ $s->id }}">{{ $s->nama_perusahaan }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                             <div class="col-md-6 mb-3">
                                 <label for="nama_barang">Nama Barang</label>
                                 <input type="text" class="form-control input" name="nama_barang" id="nama_barang" placeholder="Nama barang">
