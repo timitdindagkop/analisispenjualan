@@ -13,4 +13,8 @@ class Pembeli extends Model
     
     protected $primaryKey = 'id';
     public $incrementing = false;
+
+    public function penjualanBarang(){
+        return $this->belongsTo(PenjualanBarang::class);
+    }
 }

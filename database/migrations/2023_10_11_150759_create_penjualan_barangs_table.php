@@ -19,6 +19,9 @@ class CreatePenjualanBarangsTable extends Migration
             $table->string('tanggal');
             $table->string('total_barang');
             $table->string('total_uang');
+            $table->string('status_cicilan')->default('tidak');
+            $table->string('jumlah_cicilan')->default(0);
+            $table->string('dp_cicilan')->default(0);
             $table->timestamps();
 
             $table->foreign('pembeli_id')->references('id')->on('pembelis')->onDelete('cascade');

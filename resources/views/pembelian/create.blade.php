@@ -148,6 +148,7 @@
             }
 
             $(document).on('click', '#pilih-suplier', function(e){
+                // if(!this.value) return alert('Mohon pilih suplier');
                 e.preventDefault();
                 $('#barang').empty();
                 $('#barang').append('<option selected disabled>Pilih barang</option>');
@@ -189,7 +190,7 @@
 
                 $.ajax({
                     type: "GET",
-                    url: "/get_barang/" + id,
+                    url: "{{ route('b.index') }}/" + id,
                     data: {'_token': '{{ csrf_token() }}'},
                     success: function(response) {
                         let html =

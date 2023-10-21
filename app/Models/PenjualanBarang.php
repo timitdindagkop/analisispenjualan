@@ -13,4 +13,13 @@ class PenjualanBarang extends Model
     
     protected $primaryKey = 'id';
     public $incrementing = false;
+
+    public function DetailPenjualanBarang()
+    {
+        return $this->hasMany(DetailPenjualanBarang::class);
+    }
+
+    public function pembeli(){
+        return $this->belongsTo(Pembeli::class);
+    }
 }

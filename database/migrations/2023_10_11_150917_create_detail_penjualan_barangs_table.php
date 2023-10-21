@@ -19,9 +19,6 @@ class CreateDetailPenjualanBarangsTable extends Migration
             $table->uuid('barang_id')->index();
             $table->string('jumlah');
             $table->string('harga');
-            $table->string('status_cicilan')->default('tidak');
-            $table->string('jumlah_cicilan')->default(0);
-            $table->string('dp_cicilan')->default(0);
             $table->timestamps();
 
             $table->foreign('penjualanbarang_id')->references('id')->on('penjualan_barangs')->onDelete('cascade');

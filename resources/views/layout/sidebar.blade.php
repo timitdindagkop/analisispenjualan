@@ -65,8 +65,8 @@
                         <span class="menu-arrow"></span>
                     </a>
                     <ul class="nav-second-level mm-collapse" aria-expanded="false">
-                        <li><a href="icons-ion.html">Input Penjualan</a></li>
-                        <li><a href="icons-fontawesome.html">Data Penjualan</a></li>
+                        <li><a href="{{ route('pj.create') }}">Input Penjualan</a></li>
+                        <li><a href="{{ route('pj.index') }}">Data Penjualan</a></li>
                     </ul>
                 </li>
                 @can('Owner')

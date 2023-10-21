@@ -11,4 +11,14 @@ class DetailPenjualanBarang extends Model
 
     protected $guarded = ['id'];
     protected $primaryKey = 'id';
+
+    public function penjualanBarang()
+    {
+        return $this->belongsTo(PenjualanBarang::class);
+    }
+
+    public function barang()
+    {
+        return $this->belongsTo(Barang::class);
+    }
 }

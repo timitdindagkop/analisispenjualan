@@ -30,7 +30,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Data barang</h3>
+                        <h3 class="card-title">Data pembelian</h3>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -109,7 +109,11 @@
                     "targets": "_all",
                     "defaultContent": "-",
                     "render": function(data, type, row, meta){
-                    return row.tanggal
+                        var tanggal = row.tanggal
+                        var hari = tanggal.substring(8,10)
+                        var bulan = tanggal.substring(7,5)
+                        var tahun = tanggal.substring(0,4)
+                        return hari+'/'+bulan+"/"+tahun
                     }
                 },
                 {

@@ -72,7 +72,7 @@ class PembelianBarangController extends Controller
         $pembelian = new PembelianBarang();
         $pembelian->id = intval((microtime(true) * 10000));
         $pembelian->suplier_id = $request->suplier_id;
-        $pembelian->tanggal = date('Y-m-d H:i');
+        $pembelian->tanggal = date('Y-m-d');
         $pembelian->total_barang = $request->jumlah_total;
         $pembelian->total_uang = $request->grand_total;
         $pembelian->save();
@@ -83,6 +83,8 @@ class PembelianBarangController extends Controller
                 'barang_id' => $request->barang_id[$key],
                 'harga' => $request->harga[$key],
                 'jumlah' => $request->jumlah[$key],
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
             ];
             $barang = Barang::find($request->barang_id[$key]);
             $stok_barang = $barang->stok_barang;
@@ -101,22 +103,13 @@ class PembelianBarangController extends Controller
         return response()->json(['message' => 'Pembelian barang berhasil dilakukan']);
     }
 
-    public function getBarang($id){
+    public function show($id)
+    {
         try {
             $getsuplier = Suplier::select('nama_perusahaan', 'kode_perusahaan')->findOrFail($id);
             return response()->json(['status' => 200, 'suplier' => $getsuplier,'data' => Barang::select('id', 'nama_barang')->where('suplier_id', $id)->get()]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'List barang tidak ditemukan']);
-        }
-    }
-
-    public function show($id)
-    {
-        try {
-            $getbarang = Barang::select('id', 'nama_barang', 'kode_barang', 'harga_jual', 'stok_barang')->findOrFail($id);
-            return response()->json(['data' => $getbarang]);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'Data barang tidak ditemukan'], 404);
         }
     }
 
