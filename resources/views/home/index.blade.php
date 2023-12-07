@@ -29,7 +29,7 @@
                         </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">34</span></h4>
+                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">{{ $penjualan }}</span></h4>
                                 <p class="mb-0 mt-1 text-truncate">Penjualan</p>
                             </div>
                         </div>
@@ -45,7 +45,7 @@
                         </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">956</span></h4>
+                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">{{ $pembelian }}</span></h4>
                                 <p class="mb-0 mt-1 text-truncate">Pembelian</p>
                             </div>
                         </div>
@@ -61,7 +61,7 @@
                         </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">5210</span></h4>
+                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">{{ $pembeli }}</span></h4>
                                 <p class="mb-0 mt-1 text-truncate">Pembeli</p>
                             </div>
                         </div>
@@ -77,7 +77,7 @@
                         </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">20544</span></h4>
+                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">{{ $barang }}</span></h4>
                                 <p class="mb-0 mt-1 text-truncate">Barang</p>
                             </div>
                         </div>

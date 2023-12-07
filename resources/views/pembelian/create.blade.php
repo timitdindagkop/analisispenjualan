@@ -197,14 +197,14 @@
                             '<tr id="'+response.data.id+'">\
                                 <td><a data-id="'+response.data.id+'" type="button" class="action-icon remove-item"> <i class="mdi mdi-delete"></i></a></td>\
                                 <td>'+response.data.nama_barang+'<input type="hidden" name="barang_id[]" value="'+response.data.id+'"></td>\
-                                <td>Rp. '+rupiah(response.data.harga_jual)+'<input type="hidden" name="harga[]" value="'+response.data.harga_jual+'"></td>\
-                                <td><input type="number" name="jumlah[]" id="jumlah" data-harga_jual="'+response.data.harga_jual+'" data-id="'+response.data.id+'" class="form-control jumlah" value="1" max="'+response.data.jumlah+'" min="1"></td>\
-                                <td>Rp. '+rupiah(response.data.harga_jual)+'</td>\
+                                <td>Rp. '+rupiah(response.data.harga_beli)+'<input type="hidden" name="harga[]" value="'+response.data.harga_beli+'"></td>\
+                                <td><input type="number" name="jumlah[]" id="jumlah" data-harga_beli="'+response.data.harga_beli+'" data-id="'+response.data.id+'" class="form-control jumlah" value="1" max="'+response.data.jumlah+'" min="1"></td>\
+                                <td>Rp. '+rupiah(response.data.harga_beli)+'</td>\
                             </tr>';
                         arrayBarang.push({
                             id: response.data.id,
                             jumlah: 1,
-                            total: response.data.harga_jual
+                            total: response.data.harga_beli
                         });
                         let grand_total = 0;
                         let jumlah_total = 0;
@@ -222,8 +222,8 @@
             $(document).on('change', '.jumlah', function() {
                 let id = $(this).data('id');
                 let jumlah = $(this).val();
-                let harga_jual = $(this).data('harga_jual');
-                let total = jumlah * harga_jual;
+                let harga_beli = $(this).data('harga_beli');
+                let total = jumlah * harga_beli;
                 $('#form-pembelian #' + id + ' td:last').html('Rp.' + rupiah(total));
                 objIndex = arrayBarang.findIndex((obj => obj.id == id));
                 arrayBarang[objIndex].jumlah = jumlah;

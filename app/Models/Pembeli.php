@@ -14,7 +14,7 @@ class Pembeli extends Model
     protected $primaryKey = 'id';
     public $incrementing = false;
 
-    public function penjualanBarang(){
-        return $this->belongsTo(PenjualanBarang::class);
+    public function penjualan_barang(){
+        return $this->hasMany('App\Models\PenjualanBarang', 'id');
     }
 }

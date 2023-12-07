@@ -25,9 +25,9 @@ class PenjualanBarangController extends Controller
 
     public function json()
     {
-        $columns = ['id', 'pembeli_id', 'tanggal', 'total_uang', 'total_barang', 'status_cicilan', 'jumlah_cicilan', 'dp_cicilan'];
+        $columns = ['id', 'pembeli_id', 'tanggal', 'total_uang', 'total_barang', 'status_cicilan', 'dp_cicilan'];
         $orderBy = $columns[request()->input("order.0.column")];
-        $data = PenjualanBarang::with('pembeli')->select('id', 'pembeli_id', 'tanggal', 'total_uang', 'total_barang', 'status_cicilan', 'jumlah_cicilan', 'dp_cicilan');
+        $data = PenjualanBarang::with('pembeli')->select('id', 'pembeli_id', 'tanggal', 'total_uang', 'total_barang', 'status_cicilan', 'dp_cicilan');
 
         if (request()->input("search.value")) {
             $data = $data->where(function ($query) {
@@ -88,7 +88,6 @@ class PenjualanBarangController extends Controller
         $penjualan->total_barang = $request->jumlah_total;
         $penjualan->total_uang = $request->grand_total;
         $penjualan->status_cicilan = $request->status_cicilan;
-        $penjualan->jumlah_cicilan = $request->status_cicilan == 'ya' ? $request->jumlah_cicilan : 0;
         $penjualan->dp_cicilan = $request->status_cicilan == 'ya' ? $request->dp_cicilan : 0;
         $penjualan->save();
 
@@ -122,8 +121,9 @@ class PenjualanBarangController extends Controller
     {
         return view('penjualan.cicilan', [
             'title' => 'Cicilan pembeli',
-            'data' => PenjualanBarang::with('pembeli')->select('id', 'pembeli_id', 'tanggal', 'total_barang', 'total_uang', 'status_cicilan', 'jumlah_cicilan', 'dp_cicilan')->findOrFail($id),
+            'data' => PenjualanBarang::with('pembeli')->select('id', 'pembeli_id', 'tanggal', 'total_barang', 'total_uang', 'status_cicilan', 'dp_cicilan')->findOrFail($id),
             'detail' => DetailPenjualanBarang::with('barang')->select('barang_id', 'jumlah', 'harga')->where('penjualanbarang_id', $id)->get(),
+            'total_cicilan' => CicilanPembeli::where('penjualanbarang_id', $id)->sum('jumlah_uang')
         ]);
     }
 
@@ -134,9 +134,29 @@ class PenjualanBarangController extends Controller
     public function cetak($id){
         return view('penjualan.print', [
             'title' => 'Print Penjualan',
-            'data' => PenjualanBarang::with('pembeli')->select('id', 'pembeli_id', 'tanggal', 'total_barang', 'total_uang', 'status_cicilan', 'jumlah_cicilan', 'dp_cicilan')->findOrFail($id),
+            'data' => PenjualanBarang::with('pembeli')->select('id', 'pembeli_id', 'tanggal', 'total_barang', 'total_uang', 'status_cicilan', 'dp_cicilan')->findOrFail($id),
             'detail' => DetailPenjualanBarang::with('barang')->select('barang_id', 'jumlah', 'harga')->where('penjualanbarang_id', $id)->get(),
         ]);
+    }
+
+    public function storeCicilan(Request $request){
+        $request->validate(
+            [
+                'penjualanbarang_id' => 'required',
+                'jumlah_uang' => 'required',
+            ]
+        ); 
+
+        $cicilan = CicilanPembeli::where('penjualanbarang_id', $request->penjualanbarang_id)->get();
+        $jumlah_cicilan = $cicilan->count();
+
+        $cicilan_pembeli = new CicilanPembeli();
+        $cicilan_pembeli->id = intval((microtime(true) * 1000));
+        $cicilan_pembeli->penjualanbarang_id = $request->penjualanbarang_id;
+        $cicilan_pembeli->urutan_cicilan = $jumlah_cicilan+1;
+        $cicilan_pembeli->jumlah_uang = preg_replace('/[^0-9]/', '', $request->jumlah_uang);
+        $cicilan_pembeli->save();
+        return response()->json(['message' => 'Cicilan berhasil di bayarkan']);
     }
 
     public function edit($id)

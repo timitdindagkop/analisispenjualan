@@ -20,7 +20,6 @@ class CreatePenjualanBarangsTable extends Migration
             $table->string('total_barang');
             $table->string('total_uang');
             $table->string('status_cicilan')->default('tidak');
-            $table->string('jumlah_cicilan')->default(0);
             $table->string('dp_cicilan')->default(0);
             $table->timestamps();
 

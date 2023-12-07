@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Barang;
 use App\Models\Suplier;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -20,16 +19,16 @@ class DatabaseSeeder extends Seeder
         User::create([
             'id' => intval((microtime(true) * 10000)),
             'name' => 'Pemilik',
-            'username' => 'p',
-            'password' => bcrypt('p'),
+            'username' => 'owner',
+            'password' => bcrypt('owner'),
             'role' => '1',
         ]);
 
         User::create([
             'id' => intval((microtime(true) * 10000)),
             'name' => 'Karyawan',
-            'username' => 'o',
-            'password' => bcrypt('o'),
+            'username' => 'karyawan',
+            'password' => bcrypt('karyawan'),
             'role' => '2',
         ]);
 

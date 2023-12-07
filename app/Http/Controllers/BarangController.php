@@ -87,7 +87,7 @@ class BarangController extends Controller
     public function show($id)
     {
         try {
-            $getbarang = Barang::select('id', 'nama_barang', 'kode_barang', 'harga_jual', 'stok_barang')->findOrFail($id);
+            $getbarang = Barang::select('id', 'nama_barang', 'kode_barang', 'harga_jual', 'harga_beli', 'stok_barang')->findOrFail($id);
             return response()->json(['data' => $getbarang]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Data barang tidak ditemukan'], 404);

@@ -77,14 +77,14 @@
                         <span class="menu-arrow"></span>
                     </a>
                     <ul class="nav-second-level" aria-expanded="false">
-                        <li><a href="mail-inbox.html">Laporan perCustomer</a></li>
-                        <li><a href="mail-compose.html">Laporan Bulanan</a></li>
-                        <li><a href="mail-compose.html">Laba bersih</a></li>
+                        <li><a href="{{ url('/lpp') }}">Laporan perPembeli</a></li>
+                        <li><a href="{{ url('/lpb') }}">Laporan Bulanan</a></li>
+                        <li><a href="{{ url('/lb') }}">Laba bersih</a></li>
                     </ul>
                 </li>
 
                 <li>
-                    <a href="calendar.html" class="waves-effect">
+                    <a href="{{ url('/an') }}" class="waves-effect">
                         <i class=" mdi mdi mdi-google-analytics"></i>
                         <span> Analisa Penjualan </span>
                     </a>

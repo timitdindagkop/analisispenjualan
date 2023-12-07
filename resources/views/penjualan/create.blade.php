@@ -51,10 +51,7 @@
                                             <label class="form-check-label" for="cicilan">Ada cicilan ?</label>
                                         </div>
                                     </div>
-                                    <div class="col-lg-2">
-                                        <input type="number" class="form-control" name="jumlah_cicil" id="jumlah_cicil" placeholder="Jumlah cicilan" readonly>
-                                    </div>
-                                    <div class="col-lg-3">
+                                    <div class="col-lg-4">
                                         <input type="text" class="form-control" name="dp_cicil" id="dp_cicil" placeholder="Masukan DP cicilan" readonly>
                                     </div>
                                     <div class="col-lg-12">
@@ -97,7 +94,6 @@
                             <input type="hidden" id="idbarang">
                             <input type="hidden" id="pembeli_id" name="pembeli_id">
                             <input type="hidden" id="status_cicilan" name="status_cicilan">
-                            <input type="hidden" id="jumlah_cicilan" name="jumlah_cicilan">
                             <input type="hidden" id="dp_cicilan" name="dp_cicilan">
                             <div class="table-responsive">
                                 <table class="table table-striped mb-0" id="tabel-barang">
@@ -191,7 +187,6 @@
                 let jumlah_cicil = $('#jumlah_cicil').val();
                 let dp_cicil = $('#dp_cicil').val();
                 if (cek.length > 0) {
-                    if(!jumlah_cicil) return alert('Masukan jumlah cicilan');
                     $('#status_cicilan').val('ya');
                 } else {
                     $('#status_cicilan').val('tidak');
@@ -201,7 +196,6 @@
                 let pembeli = document.getElementById("pembeli");
                 let v_pembeli = pembeli.value;
                 let t_pembeli = pembeli.options[pembeli.selectedIndex].text;
-                $('#jumlah_cicilan').val(jumlah_cicil);
                 $('#dp_cicilan').val(dp_cicil);
                 $('#pembeli_id').val(v_pembeli);
                 $('#tambah').attr("disabled", false);
@@ -216,13 +210,11 @@
                 $('#pembeli').val('Pilih pembeli');
                 $('#jumlah_cicil').val(null);
                 $('#dp_cicil').val(null);
-                $('#jumlah_cicil').attr("readonly", true);
                 $('#dp_cicil').attr("readonly", true);
                 $('#cicilan').prop("checked", false);
 
                 $('#pembeli_id').val(null);
                 $('#status_cicilan').val(null);
-                $('#jumlah_cicilan').val(null);
                 $('#dp_cicilan').val(null);
                 arrayBarang = [];
                 removeall();
@@ -312,6 +304,9 @@
                     success: function(response) {
                         removeall()
                         Swal.fire({title:"Selamat!",text:response.message,type:"success",confirmButtonColor:"#348cd4"});
+                        $('#dp_cicil').val(null);
+                        $('#dp_cicil').attr("readonly", true);
+                        $('#cicilan').prop("checked", false);
                         $('.card-pembeli').show();
                         $('.info-pembeli').hide();
                         $('#barang').empty();
