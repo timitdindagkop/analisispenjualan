@@ -119,7 +119,7 @@ class LaporanController extends Controller
         ]);
     }
 
-    public function labaBersih(){
+    public function getBulan(){
         $getbulan[] = [
             'jan' => ['bulan' => 'Januari','urutan' => '01',],
             'feb' => ['bulan' => 'Februari','urutan' => '02',],
@@ -134,6 +134,12 @@ class LaporanController extends Controller
             'nov' => ['bulan' => 'November','urutan' => '11',],
             'des' => ['bulan' => 'Desember','urutan' => '12',],
         ];
+
+        return $getbulan;
+    }
+
+    public function labaBersih(){
+        $getbulan = $this->getBulan();
         foreach($getbulan[0] as $b){
             $data[] = [
                 'bulan' => $b['bulan'],
@@ -143,7 +149,7 @@ class LaporanController extends Controller
         
         return view('laporan.laba_bersih', [
             'title' => 'Laporan laba bersih',
-            'laba' => $data
+            'laba' => $data,
         ]);
     }
 }
