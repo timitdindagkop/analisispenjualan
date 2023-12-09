@@ -13,6 +13,7 @@ class LaporanController extends Controller
         $pembeli = Pembeli::select('id', 'nama_pembeli')->get();
         foreach($pembeli as $p){
             $data[] = [
+                'id' => $p['id'],
                 'nama_pembeli' => $p->nama_pembeli,
                 'total_pembelian' => PenjualanBarang::where('pembeli_id', $p->id)->whereMonth('tanggal', date('m'))->whereYear('tanggal', date('Y'))->sum('total_uang'),
                 'total_barang' => PenjualanBarang::where('pembeli_id', $p->id)->whereMonth('tanggal', date('m'))->whereYear('tanggal', date('Y'))->sum('total_barang'),
@@ -24,6 +25,9 @@ class LaporanController extends Controller
         ]);
     }
 
+    public function detailPembeli($id){
+        
+    }
     public function bulanan(){
         return view('laporan.perbulan', [
             'title' => 'Laporan bulanan',

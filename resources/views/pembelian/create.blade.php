@@ -263,6 +263,8 @@
                         $('#barang').empty();
                         $('#barang').append('<option selected disabled>Pilih barang</option>');
                         $('#suplier').val("Pilih Suplier");
+                        $('#tombol-simpan').removeClass('disabled');
+                        $('#tombol-simpan').html('+ Simpan pembelian');
                     }
                 });
             });

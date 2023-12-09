@@ -29,7 +29,7 @@
                         </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">{{ $penjualan }}<.'","'.pan></h4>
+                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">{{ $penjualan }}</span></h4>
                                 <p class="mb-0 mt-1 text-truncate">Penjualan</p>
                             </div>
                         </div>

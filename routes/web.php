@@ -39,6 +39,7 @@ route::resource('/pj', PenjualanBarangController::class)->middleware('auth');
 
 // laporan
 route::get('/lpp', [LaporanController::class, 'pembeli'])->middleware('auth');
+route::get('/lpp/{id}', [LaporanController::class, 'detailPembeli'])->middleware('auth');
 route::get('/lpb', [LaporanController::class, 'bulanan'])->middleware('auth');
 route::get('/lpbb', [LaporanController::class, 'bulanan_detail'])->middleware('auth');
 route::get('/lb', [LaporanController::class, 'labaBersih'])->middleware('auth');

@@ -116,7 +116,7 @@
                                 </table>
                             </div>
                             <div class="d-flex justify-content-end">
-                                <button type="submit" class="btn btn-lg btn-success" id="tombol-simpan" style="display:none">+ Simpan pembelian</button>
+                                <button type="submit" class="btn btn-lg btn-success" id="tombol-simpan" style="display:none">+ Simpan penjualan</button>
                             </div>
                         </form>
                     </div>
@@ -309,11 +309,10 @@
                         $('#cicilan').prop("checked", false);
                         $('.card-pembeli').show();
                         $('.info-pembeli').hide();
-                        $('#barang').empty();
-                        $('#barang').append('<option selected disabled>Pilih barang</option>');
+                        $('#barang').val('Pilih barang');
                         $('#pembeli').val("Pilih pembeli");
                         $('#tombol-simpan').removeClass('disabled');
-                        $('#tombol-simpan').html('Simpan Pembelian');
+                        $('#tombol-simpan').html('+ Simpan penjualan');
                     }
                 });
             });

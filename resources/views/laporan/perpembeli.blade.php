@@ -53,7 +53,7 @@
                                                 <td>{{ $item['nama_pembeli'] }}</td>
                                                 <td>Rp. {{ number_format($item['total_pembelian'],0,',','.') }}</td>
                                                 <td>{{ $item['total_barang'] }} Kilo</td>
-                                                <td><a href="#" class="btn btn-sm btn-primary">Detail</a></td>
+                                                <td><a href="{{ url('lpp') }}/{{ $item['id'] }}" class="btn btn-sm btn-primary">Detail</a></td>
                                             </tr>
                                         @endforeach
                                     </tbody>
