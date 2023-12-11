@@ -31,7 +31,7 @@
                                     <tr class="text-center">
                                         <th width="5%">#</th>
                                         <th width="30%">Bulan(X)</th>
-                                        <th width="65%">Jumlah Pendapatan(Y)</th>
+                                        <th width="65%">Jumlah Barang(Y)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -39,7 +39,7 @@
                                     <tr class="text-center">
                                         <td>{{$loop->iteration}}</td>
                                         <td>{{ $item['bulan'] }}</td>
-                                        <td>Rp. {{ number_format($item['penjualan'],0,',','.') }}</td>
+                                        <td>{{ $item['penjualan'] }} Kilo</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -66,7 +66,7 @@
                                     <tr class="text-center">
                                         <td>{{$loop->iteration}}</td>
                                         <td>{{ $item['no'] }}</td>
-                                        <td>{{ number_format($item['penjualan'],0,',','.') }}</td>
+                                        <td>{{ $item['penjualan'] }}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -99,10 +99,10 @@
                                     <tr class="text-center">
                                         <td>{{$loop->iteration}}</td>
                                         <td>{{$item['no'] }}</td>
-                                        <td>{{ number_format($item['penjualan'],0,',','.') }}</td>
+                                        <td>{{ $item['penjualan'] }}</td>
                                         <td>{{$item['no'] * $item['no']}}</td>
-                                        <td>{{ number_format($item['penjualan']*$item['penjualan'],0,',','.') }}</td>
-                                        <td>{{ number_format($item['no']*$item['penjualan'],0,',','.') }}</td>
+                                        <td>{{ $item['penjualan']*$item['penjualan'] }}</td>
+                                        <td>{{ $item['no']*$item['penjualan'] }}</td>
                                     </tr>
                                     <?php $totalno += $loop->iteration; ?>
                                     <?php $totalx += $item['no']; ?>
@@ -146,7 +146,7 @@
                         </div>
                         <?php $nilaiY = $konstanta_a + ($koefisien_b*$totalx)  ?>
                         <h6>Nilai dari persamaan dengan menggunakan metode regresi linear sederhana adalah sebagai berikut Y = <strong>{{ $nilaiY }}</strong> <br />
-                        Estimasi penjualan di tahun {{ date('Y') }} adalah sekitar Rp. {{ number_format($nilaiY,0,',','.') }}</h6>
+                        Estimasi Stok barang di tahun {{ date('Y', strtotime('+1 year')) }} adalah sekitar {{ $nilaiY }} Kilo</h6>
                     </div>
                 </div>
             </div>

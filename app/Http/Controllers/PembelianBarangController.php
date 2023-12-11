@@ -72,7 +72,7 @@ class PembelianBarangController extends Controller
         $pembelian = new PembelianBarang();
         $pembelian->id = intval((microtime(true) * 10000));
         $pembelian->suplier_id = $request->suplier_id;
-        $pembelian->tanggal = date('Y-m-d');
+        $pembelian->tanggal = $request->tanggal;
         $pembelian->total_barang = $request->jumlah_total;
         $pembelian->total_uang = $request->grand_total;
         $pembelian->save();

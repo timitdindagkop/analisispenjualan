@@ -80,7 +80,7 @@ class HomeController extends Controller
             $data[] = [
                 'no' => $no,
                 'bulan' => $b['bulan'],
-                'penjualan' => PenjualanBarang::whereYear('tanggal', date('Y'))->whereMonth('tanggal', $b['urutan'])->sum('total_uang'),
+                'penjualan' => PenjualanBarang::whereYear('tanggal', date('Y'))->whereMonth('tanggal', $b['urutan'])->sum('total_barang'),
             ];
             $no++;
         }

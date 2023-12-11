@@ -50,7 +50,7 @@
                 <li>
                     <a href="javascript: void(0);" class="waves-effect">
                         <i class="mdi mdi mdi-file-document-box-plus"></i>
-                        <span> Data Pembelian </span>
+                        <span> Master Pembelian </span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul class="nav-second-level" aria-expanded="false">
@@ -61,7 +61,7 @@
                 <li>
                     <a href="javascript: void(0);" class="waves-effect">
                         <i class="mdi mdi mdi-file-document-box-minus"></i>
-                        <span> Penjualan </span>
+                        <span> Master Penjualan </span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul class="nav-second-level mm-collapse" aria-expanded="false">

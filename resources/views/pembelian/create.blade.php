@@ -93,7 +93,10 @@
                                     </tfoot>
                                 </table>
                             </div>
-                            <div class="d-flex justify-content-end">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <input type="date" name="tanggal" id="tanggal" class="form-control" value="{{ date('Y-m-d') }}" style="display:none">
+                                </div>
                                 <button type="submit" class="btn btn-lg btn-success" id="tombol-simpan" style="display:none">+ Simpan pembelian</button>
                             </div>
                         </form>
@@ -135,6 +138,7 @@
                 $('.grand-total').html('');
                 $('#form-pembelian table tfoot').hide();
                 $('#tombol-simpan').hide();
+                $('#tanggal').hide();
                 countGrandTotal();
             }
 
@@ -214,6 +218,7 @@
                         $('.grand-total').html('<h4>Rp. '+rupiah(grand_total)+'</h4> <input type="hidden" name="grand_total" value="'+grand_total+'"><input type="hidden" name="jumlah_total" value="'+jumlah_total+'">');
                         $('#form-pembelian #idbarang').val(JSON.stringify(arrayBarang));
                         $('tfoot').show();
+                        $('#tanggal').show();
                         $('#tombol-simpan').show();
                     }
                 });

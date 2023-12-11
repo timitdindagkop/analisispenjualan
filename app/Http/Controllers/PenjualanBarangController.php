@@ -84,7 +84,7 @@ class PenjualanBarangController extends Controller
         $penjualan = new PenjualanBarang();
         $penjualan->id = intval((microtime(true) * 10000));
         $penjualan->pembeli_id = $request->pembeli_id;
-        $penjualan->tanggal = date('Y-m-d');
+        $penjualan->tanggal = $request->tanggal;
         $penjualan->total_barang = $request->jumlah_total;
         $penjualan->total_uang = $request->grand_total;
         $penjualan->status_cicilan = $request->status_cicilan;
