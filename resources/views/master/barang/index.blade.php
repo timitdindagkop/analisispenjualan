@@ -42,11 +42,10 @@
                                     <thead>
                                         <tr>
                                             <th width="5%">No</th>
-                                            <th width="10%">Suplier</th>
-                                            <th width="20%">Nama barang</th>
+                                            <th width="20%">Suplier</th>
+                                            <th width="35%">Nama barang</th>
                                             <th width="20%">Harga Kiloan</th>
                                             <th width="10%">Stok</th>
-                                            <th width="25%">Keterangan</th>
                                             <th width="10%">#</th>
                                         </tr>
                                     </thead>
@@ -160,13 +159,6 @@
                     "targets": "_all",
                     "defaultContent": "-",
                     "render": function(data, type, row, meta){
-                    return row.keterangan
-                    }
-                },
-                {
-                    "targets": "_all",
-                    "defaultContent": "-",
-                    "render": function(data, type, row, meta){
                     return `
                         <div class="btn-group">
                             <button class="btn btn-sm btn-warning edit-barang" title="Edit data" data-id="`+row.id+`"><i class="mdi mdi mdi-file-document-edit-outline"></i></button>
@@ -195,6 +187,7 @@
                 type: "GET",
                 url: "{{ route('b.index') }}/"+ idedit,
                 success: function(response){
+                    console.log(response);
                     $('#simpan').val("update");
                     $('#simpan').text("Ubah Data");
                     $('#id').val(response.data.id);
@@ -204,7 +197,6 @@
                     harga_beli.value = convertRupiah(response.data.harga_beli, "Rp. ");
                     harga_jual.value = convertRupiah(response.data.harga_jual, "Rp. ");
                     $('#stok_barang').val(response.data.stok_barang);
-                    $('#keterangan').val(response.data.keterangan);
                     $('#modal_input').modal('show');
                 },
                 error: function(err){

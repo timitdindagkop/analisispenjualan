@@ -112,12 +112,12 @@
                                     <?php $totalxy += $item['no'] * $item['penjualan']; ?>
                                 @endforeach
                                 <tr class="text-center">
-                                    <td>Total</td>
-                                    <td>{{ $totalx }}</td>
-                                    <td>{{ $totaly }}</td>
-                                    <td>{{ $totalx2 }}</td>
-                                    <td>{{ $totaly2 }}</td>
-                                    <td>{{ $totalxy }}</td>
+                                    <td><strong>Total</strong></td>
+                                    <td><strong>{{ $totalx }}</strong></td>
+                                    <td><strong>{{ $totaly }}</strong></td>
+                                    <td><strong>{{ $totalx2 }}</strong></td>
+                                    <td><strong>{{ $totaly2 }}</strong></td>
+                                    <td><strong>{{ $totalxy }}</strong></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -129,7 +129,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4>Menghitung nilai Konstanta (a) dan koefisien (b)</h4>
+                        <h5>Menghitung nilai Konstanta (a) dan koefisien (b)</h5>
                     <?php $konstanta_a = (($totaly*$totalx2) - ($totaly*$totalxy)) / (($totalno*$totalx2) - ($totalx*$totalx) )  ?>
                     <?php $koefisien_b = (($totalno*$totalxy) - ($totalx*$totaly)) / (($totalno*$totalx2) - ($totalx*$totalx) )  ?>
                         <div class="table-responsive">
@@ -145,8 +145,8 @@
                             </table>
                         </div>
                         <?php $nilaiY = $konstanta_a + ($koefisien_b*$totalx)  ?>
-                        <h6>Nilai dari persamaan dengan menggunakan metode regresi linear sederhana adalah sebagai berikut Y = <strong>{{ $nilaiY }}</strong> <br />
-                        Estimasi Stok barang di tahun {{ date('Y', strtotime('+1 year')) }} adalah sekitar {{ $nilaiY }} Kilo</h6>
+                        <h4>Nilai dari persamaan dengan menggunakan metode regresi linear sederhana adalah sebagai berikut <br /> Y = <strong>{{ $nilaiY }}</strong> <br />
+                        Estimasi Stok barang di tahun {{ date('Y', strtotime('+1 year')) }} adalah sekitar {{ $nilaiY }} Kilo</h4>
                     </div>
                 </div>
             </div>

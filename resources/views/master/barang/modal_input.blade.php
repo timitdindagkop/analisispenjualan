@@ -42,10 +42,6 @@
                             </div> --}}
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="keterangan">Keterangan</label>
-                        <textarea class="form-control input" name="keterangan" id="keterangan" cols="10" rows="3" placeholder="Masukan keterangan barang"></textarea>
-                    </div>
                 </form>
             </div>
             <div class="modal-footer">

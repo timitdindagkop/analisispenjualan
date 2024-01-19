@@ -39,7 +39,7 @@
                                     <thead>
                                         <tr>
                                             <th width="5%">No</th>
-                                            <th width="15%">Kode Pembelian</th>
+                                            {{-- <th width="15%">Kode Pembelian</th> --}}
                                             <th width="20%">Tanggal</th>
                                             <th width="30%">Total Barang (Kiloan)</th>
                                             <th width="30%">Total Uang</th>
@@ -98,13 +98,13 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                {
-                    "targets": "_all",
-                    "defaultContent": "-",
-                    "render": function(data, type, row, meta){
-                    return row.id
-                    }
-                },
+                // {
+                //     "targets": "_all",
+                //     "defaultContent": "-",
+                //     "render": function(data, type, row, meta){
+                //     return row.id
+                //     }
+                // },
                 {
                     "targets": "_all",
                     "defaultContent": "-",

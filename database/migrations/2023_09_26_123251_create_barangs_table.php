@@ -21,7 +21,6 @@ class CreateBarangsTable extends Migration
             $table->string('harga_jual');
             $table->string('harga_beli');
             $table->string('stok_barang');
-            $table->string('keterangan');
             $table->timestamps();
 
             $table->foreign('suplier_id')->references('id')->on('supliers')->onDelete('cascade');

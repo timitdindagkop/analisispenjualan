@@ -39,7 +39,7 @@
                                     <thead>
                                         <tr>
                                             <th width="5%">No</th>
-                                            <th width="15%">Kode Penjualan</th>
+                                            {{-- <th width="15%">Kode Penjualan</th> --}}
                                             <th width="15%">Pembeli</th>
                                             <th width="15%">Tanggal</th>
                                             <th width="15%">Total Barang (Kiloan)</th>
@@ -99,18 +99,18 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
+                // {
+                //     "targets": "_all",
+                //     "defaultContent": "-",
+                //     "render": function(data, type, row, meta){
+                //     return row.id
+                //     }
+                // },
                 {
                     "targets": "_all",
                     "defaultContent": "-",
                     "render": function(data, type, row, meta){
-                    return row.id
-                    }
-                },
-                {
-                    "targets": "_all",
-                    "defaultContent": "-",
-                    "render": function(data, type, row, meta){
-                    return row.pembeli.nama_pembeli
+                    return row.nama_pembeli
                     }
                 },
                 {
@@ -142,23 +142,30 @@
                     "targets": "_all",
                     "defaultContent": "-",
                     "render": function(data, type, row, meta){
-                    if (row.status_cicilan == "ya") {
-                        return row.status_cicilan+` <a href="{{ route('pj.index') }}/`+row.id+`" class="btn btn-sm btn-primary">Cicilan</a>`
-                    } else {
                         return row.status_cicilan
-                    }
                     }
                 },
                 {
                     "targets": "_all",
                     "defaultContent": "-",
                     "render": function(data, type, row, meta){
-                    return `
+                    if (row.status_cicilan == "ya" || row.status_cicilan == "Lunas") {
+                        return `<a href="{{ route('pj.index') }}/`+row.id+`" class="btn btn-sm btn-primary">Cicilan</a>
                         <div class="btn-group">
                             <a href="{{ url('print_pj') }}/`+row.id+`" target="_blank" class="btn btn-sm btn-success edit-barang" title="Cetak laporan" data-id="`+row.id+`"><i class="mdi mdi mdi-printer"></i></a>
                             <button class="btn btn-sm btn-danger hapusdata" title="Hapus data" data-id="`+row.id+`"><i class="mdi mdi mdi-delete-outline"></i></button>
                         </div>
                     `
+                    }else{
+                        return `
+                        <div class="btn-group">
+                            <a href="{{ url('print_pj') }}/`+row.id+`" target="_blank" class="btn btn-sm btn-success edit-barang" title="Cetak laporan" data-id="`+row.id+`"><i class="mdi mdi mdi-printer"></i></a>
+                            <button class="btn btn-sm btn-danger hapusdata" title="Hapus data" data-id="`+row.id+`"><i class="mdi mdi mdi-delete-outline"></i></button>
+                        </div>
+                        `
+                    }
+                    
+
                     }
                 },
             ]

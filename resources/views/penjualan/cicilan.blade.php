@@ -35,7 +35,7 @@
                         Total jumlah barang : {{ $data->total_barang }} Kilo<br />
                         Total harus bayar : Rp. {{ number_format($data->total_uang,0,',','.') }}<br />
                         <hr />
-                        Status Cicilan : <span class="badge badge-primary">{{ $data->status_cicilan }}</span> <br />
+                        Status Cicilan : <span class="badge badge-primary status">{{ $data->status_cicilan }}</span> <br />
                         DP Cicilan : Rp. {{ number_format($data->dp_cicilan,0,',','.') }}<br />
                         Cicilan : Rp. {{ number_format($total_cicilan,0,',','.') }} <br />
                         Kekurangan uang : {{ number_format($data->total_uang-$data->dp_cicilan-$total_cicilan,0,',','.') }}
@@ -83,7 +83,8 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-3">
                             <h5>Daftar cicilan</h5>
-                            <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#modalcicilan">Bayar cicilan</button>
+                            <button class="btn btn-sm btn-success bayar_cicilan" data-toggle="modal" data-target="#modalcicilan">Bayar cicilan</button>
+                            <button class="btn btn-sm btn-dark bayar_cicilan2" style="display: none" disabled>Bayar cicilan</button>
                         </div>
                         <div class="row">
                             <div class="col-12">
@@ -159,6 +160,14 @@
                 type: "GET",
                 url: "{{ url('get_c') }}/"+"{{ $data->id }}",
                 success: function (response){
+                    if (response.total_cicilan == 0) {
+                        $('.bayar_cicilan').hide();
+                        $('.bayar_cicilan2').show();
+                        $('.status').removeClass('badge-primary');
+                        $('.status').addClass('badge-success');
+                        $('.status').html('Lunas')
+                    }
+
                     let data = response.data;
                     let body = '';
                     $('#loading').hide()

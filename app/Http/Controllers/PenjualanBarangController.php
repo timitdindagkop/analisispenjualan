@@ -23,11 +23,29 @@ class PenjualanBarangController extends Controller
         ]);
     }
 
+    public function data($data){
+        foreach ($data as $item) {
+            $pembayarancicilan = CicilanPembeli::where('penjualanbarang_id', $item->id)->sum('jumlah_uang');
+            $pelunasan = $pembayarancicilan + $item->dp_cicilan - $item->total_uang;
+            $result[] = [
+                'id' => $item->id,
+                'nama_pembeli' => $item->pembeli->nama_pembeli,
+                'tanggal' => $item->tanggal,
+                'total_barang' => $item->total_barang,
+                'total_uang' => $item->total_uang,
+                'status_cicilan' => $pelunasan == 0 ? 'Lunas' : $item->status_cicilan,
+                'dp_cicilan' => $item->dp_cicilan,
+            ];
+        }
+
+        return $result;
+    }
+
     public function json()
     {
         $columns = ['id', 'pembeli_id', 'tanggal', 'total_uang', 'total_barang', 'status_cicilan', 'dp_cicilan'];
         $orderBy = $columns[request()->input("order.0.column")];
-        $data = PenjualanBarang::with('pembeli')->select('id', 'pembeli_id', 'tanggal', 'total_uang', 'total_barang', 'status_cicilan', 'dp_cicilan');
+        $data = PenjualanBarang::with(['pembeli'])->select('id', 'pembeli_id', 'tanggal', 'total_uang', 'total_barang', 'status_cicilan', 'dp_cicilan');
 
         if (request()->input("search.value")) {
             $data = $data->where(function ($query) {
@@ -38,12 +56,14 @@ class PenjualanBarangController extends Controller
 
         $recordsFiltered = $data->get()->count();
         $data = $data->skip(request()->input('start'))->take(request()->input('length'))->orderBy($orderBy, request()->input("order.0.dir"))->get();
+
         $recordsTotal = $data->count();
+
         return response()->json([
             'draw' => request()->input('draw'),
             'recordsTotal' => $recordsTotal,
             'recordsFiltered' => $recordsFiltered,
-            'data' => $data
+            'data' => $this->data($data)
         ]);
     }
 
@@ -91,6 +111,15 @@ class PenjualanBarangController extends Controller
         $penjualan->dp_cicilan = $request->status_cicilan == 'ya' ? $request->dp_cicilan : 0;
         $penjualan->save();
 
+        if ($request->status_cicilan == 'ya') {
+            $cicilan = new CicilanPembeli();
+            $cicilan->penjualanbarang_id = $penjualan->id;
+            $cicilan->id = intval((microtime(true) * 1000));
+            $cicilan->urutan_cicilan = 1;
+            $cicilan->jumlah_uang = $request->dp_cicilan;
+            $cicilan->save();
+        }
+
         foreach ($request->barang_id as $key => $value) {
             $data[] = [
                 'penjualanbarang_id' => $penjualan->id,
@@ -128,7 +157,16 @@ class PenjualanBarangController extends Controller
     }
 
     public function getCicilan($id){
-            return response()->json(['data' => CicilanPembeli::select('id', 'urutan_cicilan', 'jumlah_uang', 'created_at')->where('penjualanbarang_id', $id)->get()]);
+            $cicilan = CicilanPembeli::select('id', 'urutan_cicilan', 'jumlah_uang', 'created_at')->where('penjualanbarang_id', $id)->get();
+            $penjualan = PenjualanBarang::find($id);
+
+            $dp = $penjualan->dp_cicilan;
+            $total_uang = $penjualan->total_uang;
+            $total_cicilan = ($dp + $cicilan->sum('jumlah_uang')) - $total_uang; 
+            return response()->json([
+                'total_cicilan' => $total_cicilan,    
+                'data' => $cicilan
+            ]);
     }
 
     public function cetak($id){

@@ -20,9 +20,9 @@ class BarangController extends Controller
     }
 
     public function json(){
-        $columns = ['id', 'suplier_id', 'kode_barang', 'nama_barang', 'harga_jual', 'harga_beli', 'stok_barang', 'keterangan' ];
+        $columns = ['id', 'suplier_id', 'kode_barang', 'nama_barang', 'harga_jual', 'harga_beli', 'stok_barang'];
         $orderBy = $columns[request()->input("order.0.column")];
-        $data = Barang::with('suplier')->select('id', 'suplier_id', 'kode_barang', 'nama_barang', 'harga_jual', 'harga_beli', 'stok_barang', 'keterangan');
+        $data = Barang::with('suplier')->select('id', 'suplier_id', 'kode_barang', 'nama_barang', 'harga_jual', 'harga_beli', 'stok_barang');
 
         if(request()->input("search.value")){
             $data = $data->where(function($query){
@@ -30,8 +30,7 @@ class BarangController extends Controller
                 ->orWhereRaw('nama_barang like ? ', ['%'.request()->input("search.value").'%'])
                 ->orWhereRaw('harga_jual like ? ', ['%'.request()->input("search.value").'%'])
                 ->orWhereRaw('harga_beli like ? ', ['%'.request()->input("search.value").'%'])
-                ->orWhereRaw('stok_barang like ? ', ['%'.request()->input("search.value").'%'])
-                ->orWhereRaw('keterangan like ? ', ['%'.request()->input("search.value").'%']);
+                ->orWhereRaw('stok_barang like ? ', ['%'.request()->input("search.value").'%']);
             });
         }
 
@@ -53,8 +52,7 @@ class BarangController extends Controller
                 'kode_barang' => 'required',
                 'harga_jual' => 'required',
                 'harga_beli' => 'required',
-                'stok_barang' => 'required',
-                'keterangan' => 'required',
+                'stok_barang' => 'required'
             ],
             [
                 'nama_barang.required' => 'Nama barang tidak boleh kosong',
@@ -62,7 +60,6 @@ class BarangController extends Controller
                 'harga_jual.required' => 'Harga jual tidak boleh kosong',
                 'harga_beli.required' => 'Harga beli tidak boleh kosong',
                 'stok_barang.required' => 'Stok barang tidak boleh kosong',
-                'keterangan.required' => 'Keterangan tidak boleh kosong',
             ]
         );
     }
@@ -79,7 +76,6 @@ class BarangController extends Controller
         $barang->harga_beli = preg_replace('/[^0-9]/', '', $request->harga_beli);
         $barang->harga_jual = preg_replace('/[^0-9]/', '', $request->harga_jual);
         $barang->stok_barang = $request->stok_barang;
-        $barang->keterangan = $request->keterangan;
         $barang->save();
         return response()->json(['message' => 'Barang baru berhasil di buat']);
     }
@@ -87,7 +83,7 @@ class BarangController extends Controller
     public function show($id)
     {
         try {
-            $getbarang = Barang::select('id', 'nama_barang', 'kode_barang', 'harga_jual', 'harga_beli', 'stok_barang')->findOrFail($id);
+            $getbarang = Barang::select('id', 'suplier_id', 'nama_barang', 'kode_barang', 'harga_jual', 'harga_beli', 'stok_barang')->findOrFail($id);
             return response()->json(['data' => $getbarang]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Data barang tidak ditemukan'], 404);
@@ -106,7 +102,6 @@ class BarangController extends Controller
             $update_barang->harga_beli = preg_replace('/[^0-9]/', '', $request->harga_beli);
             $update_barang->harga_jual = preg_replace('/[^0-9]/', '', $request->harga_jual);
             $update_barang->stok_barang = $request->stok_barang;
-            $update_barang->keterangan = $request->keterangan;
             $update_barang->update();
             return response()->json(['message' => 'Barang berhasil di ubah',]);
         } catch (ModelNotFoundException $e) {

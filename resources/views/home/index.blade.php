@@ -137,7 +137,7 @@
                 yAxes: [{
                     ticks: {
                         min: 0,
-                    }
+                    },
                 }],
                 xAxes: [{
                     gridLines: {

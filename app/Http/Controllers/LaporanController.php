@@ -26,8 +26,14 @@ class LaporanController extends Controller
     }
 
     public function detailPembeli($id){
+        $penjualan = PenjualanBarang::where('pembeli_id', $id)->whereYear('tanggal', date('Y'))->get();
         
+        return view('laporan.detail_perpembeli', [
+            'title' => 'Detail pembelian',
+            'data' => $penjualan
+        ]);
     }
+
     public function bulanan(){
         return view('laporan.perbulan', [
             'title' => 'Laporan bulanan',
