@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Barang;
-use App\Models\Suplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -15,27 +14,28 @@ class BarangController extends Controller
     {
         return view('master.barang.index', [
             'title' => 'Barang',
-            'suplier' => Suplier::select('id', 'nama_perusahaan')->get()
         ]);
     }
 
-    public function json(){
-        $columns = ['id', 'suplier_id', 'kode_barang', 'nama_barang', 'harga_jual', 'harga_beli', 'stok_barang'];
+    public function json()
+    {
+        $columns = ['id', 'kode_barang', 'nama_suplier', 'nama_barang', 'harga_jual', 'harga_beli', 'stok_barang'];
         $orderBy = $columns[request()->input("order.0.column")];
-        $data = Barang::with('suplier')->select('id', 'suplier_id', 'kode_barang', 'nama_barang', 'harga_jual', 'harga_beli', 'stok_barang');
+        $data = Barang::select('id', 'kode_barang', 'nama_suplier', 'nama_barang', 'harga_jual', 'harga_beli', 'stok_barang');
 
-        if(request()->input("search.value")){
-            $data = $data->where(function($query){
-                $query->whereRaw('kode_barang like ? ', ['%'.request()->input("search.value").'%'])
-                ->orWhereRaw('nama_barang like ? ', ['%'.request()->input("search.value").'%'])
-                ->orWhereRaw('harga_jual like ? ', ['%'.request()->input("search.value").'%'])
-                ->orWhereRaw('harga_beli like ? ', ['%'.request()->input("search.value").'%'])
-                ->orWhereRaw('stok_barang like ? ', ['%'.request()->input("search.value").'%']);
+        if (request()->input("search.value")) {
+            $data = $data->where(function ($query) {
+                $query->whereRaw('kode_barang like ? ', ['%' . request()->input("search.value") . '%'])
+                    ->orWhereRaw('nama_suplier like ? ', ['%' . request()->input("search.value") . '%'])
+                    ->orWhereRaw('nama_barang like ? ', ['%' . request()->input("search.value") . '%'])
+                    ->orWhereRaw('harga_jual like ? ', ['%' . request()->input("search.value") . '%'])
+                    ->orWhereRaw('harga_beli like ? ', ['%' . request()->input("search.value") . '%'])
+                    ->orWhereRaw('stok_barang like ? ', ['%' . request()->input("search.value") . '%']);
             });
         }
 
         $recordsFiltered = $data->get()->count();
-        $data = $data->skip(request()->input('start'))->take(request()->input('length'))->orderBy($orderBy,request()->input("order.0.dir"))->get();
+        $data = $data->skip(request()->input('start'))->take(request()->input('length'))->orderBy($orderBy, request()->input("order.0.dir"))->get();
         $recordsTotal = $data->count();
         return response()->json([
             'draw' => request()->input('draw'),
@@ -45,9 +45,11 @@ class BarangController extends Controller
         ]);
     }
 
-    public function validasi($request){
+    public function validasi($request)
+    {
         $request->validate(
             [
+                'nama_suplier' => 'required',
                 'nama_barang' => 'required',
                 'kode_barang' => 'required',
                 'harga_jual' => 'required',
@@ -55,6 +57,7 @@ class BarangController extends Controller
                 'stok_barang' => 'required'
             ],
             [
+                'nama_suplier.required' => 'Nama suplier tidak boleh kosong',
                 'nama_barang.required' => 'Nama barang tidak boleh kosong',
                 'kode_barang.required' => 'Nama barang tidak boleh kosong',
                 'harga_jual.required' => 'Harga jual tidak boleh kosong',
@@ -71,7 +74,7 @@ class BarangController extends Controller
         $barang = new Barang();
         $barang->id = Str::uuid()->toString();
         $barang->kode_barang = $request->kode_barang;
-        $barang->suplier_id = $request->suplier_id;
+        $barang->nama_suplier = $request->nama_suplier;
         $barang->nama_barang = $request->nama_barang;
         $barang->harga_beli = preg_replace('/[^0-9]/', '', $request->harga_beli);
         $barang->harga_jual = preg_replace('/[^0-9]/', '', $request->harga_jual);
@@ -83,7 +86,7 @@ class BarangController extends Controller
     public function show($id)
     {
         try {
-            $getbarang = Barang::select('id', 'suplier_id', 'nama_barang', 'kode_barang', 'harga_jual', 'harga_beli', 'stok_barang')->findOrFail($id);
+            $getbarang = Barang::select('id', 'nama_barang', 'nama_suplier', 'kode_barang', 'harga_jual', 'harga_beli', 'stok_barang')->findOrFail($id);
             return response()->json(['data' => $getbarang]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Data barang tidak ditemukan'], 404);
@@ -96,9 +99,9 @@ class BarangController extends Controller
         // menyimpan data barang
         try {
             $update_barang = Barang::findOrFail($id);
+            $update_barang->nama_suplier = $request->nama_suplier;
             $update_barang->nama_barang = $request->nama_barang;
             $update_barang->kode_barang = $request->kode_barang;
-            $update_barang->suplier_id = $request->suplier_id;
             $update_barang->harga_beli = preg_replace('/[^0-9]/', '', $request->harga_beli);
             $update_barang->harga_jual = preg_replace('/[^0-9]/', '', $request->harga_jual);
             $update_barang->stok_barang = $request->stok_barang;

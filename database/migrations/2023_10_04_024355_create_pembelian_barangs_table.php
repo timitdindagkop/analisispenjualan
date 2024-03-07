@@ -15,13 +15,10 @@ class CreatePembelianBarangsTable extends Migration
     {
         Schema::create('pembelian_barangs', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('suplier_id')->index();
             $table->string('tanggal');
             $table->string('total_barang');
             $table->string('total_uang');
             $table->timestamps();
-
-            $table->foreign('suplier_id')->references('id')->on('supliers')->onDelete('cascade');
         });
     }
 

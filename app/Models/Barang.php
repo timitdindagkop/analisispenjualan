@@ -13,9 +13,4 @@ class Barang extends Model
     
     protected $primaryKey = 'id';
     public $incrementing = false;
-
-    public function suplier()
-    {
-        return $this->belongsTo(Suplier::class);
-    }
 }

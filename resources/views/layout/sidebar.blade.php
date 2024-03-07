@@ -39,9 +39,6 @@
                         <span class="menu-arrow"></span>
                     </a>
                     <ul class="nav-second-level" aria-expanded="false">
-                        @can('Owner')
-                            <li><a href="{{ route('sp.index') }}">Data Suplier</a></li>
-                        @endcan
                         <li><a href="{{ route('b.index') }}">Data Barang</a></li>
                         <li><a href="{{ route('pe.index') }}">Data Pembeli</a></li>
                     </ul>

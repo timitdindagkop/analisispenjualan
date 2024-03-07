@@ -52,61 +52,34 @@ class DatabaseSeeder extends Seeder
             'telepon' => "0238423642344"
         ]);
 
-        Suplier::create([
-            'id' => 1702032971502,
-            'kode_perusahaan' => 'TM001',
-            'nama_perusahaan' => 'CV. Terus makmur',
-            'alamat' => 'Semarang',
-            'telepon' => '0823454332765',
-        ]);
-
-        Suplier::create([
-            'id' => 1702032971504,
-            'kode_perusahaan' => 'SAN001',
-            'nama_perusahaan' => 'PT. Seger agro nusantara',
-            'alamat' => 'Semarang',
-            'telepon' => '08234543327345',
-        ]);
-
-        Suplier::create([
-            'id' => 1785062978236,
-            'kode_perusahaan' => 'SJ0001',
-            'nama_perusahaan' => 'CV. Sawit Juara',
-            'alamat' => 'Semarang',
-            'telepon' => '082347352434366',
-        ]);
-
         Barang::create([
             'id' => Str::uuid()->toString(),
-            'suplier_id' => 1702032971502,
+            'nama_suplier' => "CV. Terus makmur",
             'kode_barang' => "CPUT01",
             'nama_barang' => "CPU - Tulip",
             'harga_jual' => 12400,
             'harga_beli' => 11800,
             'stok_barang' => 0,
-            'keterangan' => "tes",
         ]);
 
         Barang::create([
             'id' => Str::uuid()->toString(),
-            'suplier_id' => 1702032971504,
+            'nama_suplier' => "CV. Sawit Juara",
             'kode_barang' => "SRG01",
             'nama_barang' => "SSG - SGR",
             'harga_jual' => 12200,
             'harga_beli' => 11900,
             'stok_barang' => 0,
-            'keterangan' => "tes",
         ]);
         
         Barang::create([
             'id' => Str::uuid()->toString(),
-            'suplier_id' => 1785062978236,
+            'nama_suplier' => "PT. Seger agro nusantara",
             'kode_barang' => "SPC",
             'nama_barang' => "SPC - Siip",
             'harga_jual' => 12000,
             'harga_beli' => 11600,
             'stok_barang' => 0,
-            'keterangan' => "tes",
         ]);
     }
 }

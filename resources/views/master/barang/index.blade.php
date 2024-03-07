@@ -131,7 +131,7 @@
                     "targets": "_all",
                     "defaultContent": "-",
                     "render": function(data, type, row, meta){
-                    return row.suplier.nama_perusahaan
+                    return row.nama_suplier
                     }
                 },
                 {
@@ -193,7 +193,7 @@
                     $('#id').val(response.data.id);
                     $('#nama_barang').val(response.data.nama_barang);
                     $('#kode_barang').val(response.data.kode_barang);
-                    $('#suplier_id').val(response.data.suplier_id);
+                    $('#nama_suplier').val(response.data.nama_suplier);
                     harga_beli.value = convertRupiah(response.data.harga_beli, "Rp. ");
                     harga_jual.value = convertRupiah(response.data.harga_jual, "Rp. ");
                     $('#stok_barang').val(response.data.stok_barang);

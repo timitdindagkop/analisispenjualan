@@ -12,13 +12,8 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <label for="suplier_id">Suplier</label>
-                                <select name="suplier_id" id="suplier_id" class="form-control">
-                                    <option selected disabled>Pilih Suplier</option>
-                                    @foreach ($suplier as $s)
-                                        <option value="{{ $s->id }}">{{ $s->nama_perusahaan }}</option>
-                                    @endforeach
-                                </select>
+                                <label for="nama_suplier">Nama Suplier</label>
+                                <input type="text" class="form-control input" name="nama_suplier" id="nama_suplier" placeholder="Nama suplier">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="nama_barang">Nama Barang</label>

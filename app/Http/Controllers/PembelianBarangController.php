@@ -7,14 +7,12 @@ use App\Models\Barang;
 use App\Models\DetailPembelianBarang;
 use App\Models\HistoriBarang;
 use App\Models\PembelianBarang;
-use App\Models\Suplier;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 
 class PembelianBarangController extends Controller
 {
-
     public function index()
     {
         return view('pembelian.index', [
@@ -50,7 +48,6 @@ class PembelianBarangController extends Controller
         return view('pembelian.create', [
             'title' => 'Buat Pembelian Barang',
             'barang' => Barang::select('id', 'nama_barang')->get(),
-            'suplier' => Suplier::select('id', 'nama_perusahaan')->get(),
         ]);
     }
 
@@ -71,7 +68,6 @@ class PembelianBarangController extends Controller
 
         $pembelian = new PembelianBarang();
         $pembelian->id = intval((microtime(true) * 10000));
-        $pembelian->suplier_id = $request->suplier_id;
         $pembelian->tanggal = $request->tanggal;
         $pembelian->total_barang = $request->jumlah_total;
         $pembelian->total_uang = $request->grand_total;
@@ -106,15 +102,14 @@ class PembelianBarangController extends Controller
     public function show($id)
     {
         try {
-            $getsuplier = Suplier::select('nama_perusahaan', 'kode_perusahaan')->findOrFail($id);
-            return response()->json(['status' => 200, 'suplier' => $getsuplier,'data' => Barang::select('id', 'nama_barang')->where('suplier_id', $id)->get()]);
+            return response()->json(['status' => 200, 'data' => Barang::select('id', 'nama_barang')->get()]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'List barang tidak ditemukan']);
         }
     }
 
     public function cetak($id) {
-        $pembelian = PembelianBarang::with('suplier')->findOrFail($id);
+        $pembelian = PembelianBarang::findOrFail($id);
         $detailPembelian = DetailPembelianBarang::with('barang')->where('pembelianbarang_id', $id)->get();
         return view('pembelian.print', [
             'title' => 'Cetak Pembelia Barang',

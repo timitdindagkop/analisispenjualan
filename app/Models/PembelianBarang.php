@@ -18,8 +18,4 @@ class PembelianBarang extends Model
     {
         return $this->hasMany(DetailPembelianBarang::class);
     }
-
-    public function suplier(){
-        return $this->belongsTo(Suplier::class);
-    }
 }
