@@ -20,20 +20,21 @@ class PembelianBarangController extends Controller
         ]);
     }
 
-    public function json(){
-        $columns = ['id', 'tanggal', 'total_uang', 'total_barang' ];
+    public function json()
+    {
+        $columns = ['id', 'tanggal', 'total_uang', 'total_barang'];
         $orderBy = $columns[request()->input("order.0.column")];
         $data = PembelianBarang::select('id', 'tanggal', 'total_uang', 'total_barang');
 
-        if(request()->input("search.value")){
-            $data = $data->where(function($query){
-                $query->whereRaw('total_uang like ? ', ['%'.request()->input("search.value").'%'])
-                ->orWhereRaw('total_barang like ? ', ['%'.request()->input("search.value").'%']);
+        if (request()->input("search.value")) {
+            $data = $data->where(function ($query) {
+                $query->whereRaw('total_uang like ? ', ['%' . request()->input("search.value") . '%'])
+                    ->orWhereRaw('total_barang like ? ', ['%' . request()->input("search.value") . '%']);
             });
         }
 
         $recordsFiltered = $data->get()->count();
-        $data = $data->skip(request()->input('start'))->take(request()->input('length'))->orderBy($orderBy,request()->input("order.0.dir"))->get();
+        $data = $data->skip(request()->input('start'))->take(request()->input('length'))->orderBy($orderBy, request()->input("order.0.dir"))->get();
         $recordsTotal = $data->count();
         return response()->json([
             'draw' => request()->input('draw'),
@@ -99,16 +100,8 @@ class PembelianBarangController extends Controller
         return response()->json(['message' => 'Pembelian barang berhasil dilakukan']);
     }
 
-    public function show($id)
+    public function cetak($id)
     {
-        try {
-            return response()->json(['status' => 200, 'data' => Barang::select('id', 'nama_barang')->get()]);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'List barang tidak ditemukan']);
-        }
-    }
-
-    public function cetak($id) {
         $pembelian = PembelianBarang::findOrFail($id);
         $detailPembelian = DetailPembelianBarang::with('barang')->where('pembelianbarang_id', $id)->get();
         return view('pembelian.print', [
@@ -125,7 +118,24 @@ class PembelianBarangController extends Controller
 
     public function destroy($id)
     {
-        PembelianBarang::destroy($id);
+        $pembelian = PembelianBarang::find($id);
+        $detailPembelian = DetailPembelianBarang::where('pembelianbarang_id', $id)->get();
+        foreach ($detailPembelian as $dp) {
+
+            $barang = Barang::find($dp->barang_id);
+            $stok_barang = $barang->stok_barang;
+            $barang->stok_barang = $stok_barang - $dp->jumlah;
+            $barang->update();
+
+            $history = new HistoriBarang();
+            $history->kategori = "hapus_pembelian";
+            $history->barang_id = $barang->id;
+            $history->nama_barang = $barang->nama_barang;
+            $history->jumlah = $dp->jumlah;
+            $history->harga_barang = $dp->harga;
+            $history->save();
+        }
+        $pembelian->delete();
         return response()->json(['message' => 'Data pembelian barang berhasil di hapus']);
     }
 }

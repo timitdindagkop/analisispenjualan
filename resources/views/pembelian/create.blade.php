@@ -24,30 +24,6 @@
         <!-- end page title -->
 
         <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-header bg-secondary">
-                        <h3 class="card-title text-white">Data Suplier</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-lg-12 info-suplier" style="display: none">
-                                <div class="isi-suplier"></div>
-                                <button class="btn btn-lg btn-danger ubah-suplier">Ubah pilihan suplier</button>
-                            </div>
-                            <div class="col-lg-12 card-suplier">
-                                <select name="suplier" id="suplier" class="form-control">
-                                    <option selected disabled>Pilih Suplier</option>
-                                    @foreach ($suplier as $s)
-                                        <option value="{{ $s->id }}">{{ $s->nama_perusahaan }}</option>
-                                    @endforeach
-                                </select>
-                                <button class="btn btn-lg btn-dark mt-2" id="pilih-suplier">Pilih Suplier</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="col-lg-4">
                 <div class="card">
                     <div class="card-header bg-secondary">
@@ -56,6 +32,9 @@
                     <div class="card-body">
                         <select name="barang" id="barang" class="form-control">
                             <option selected disabled>Pilih barang</option>
+                            @foreach ($barang as $b)
+                                <option value="{{ $b->id }}">{{ $b->nama_barang }}</option>
+                            @endforeach
                         </select>
                         <div class="d-flex justify-content-end mt-3">
                             <button class="btn btn-primary" id="tambah">Tambah barang</button>
@@ -72,7 +51,6 @@
                         <form id="form-pembelian">
                             @csrf
                             <input type="hidden" id="idbarang">
-                            <input type="hidden" id="suplier_id" name="suplier_id">
                             <div class="table-responsive">
                                 <table class="table table-striped mb-0" id="tabel-barang">
                                     <thead>
@@ -151,41 +129,6 @@
                 $('.grand-total').html('<h4>Rp.'+rupiah(grand_total)+'</h4><input type="hidden" name="grand_total" value="'+grand_total+'"><input type="hidden" name="jumlah_total" value="'+jumlah_total+'">')
             }
 
-            $(document).on('click', '#pilih-suplier', function(e){
-                // if(!this.value) return alert('Mohon pilih suplier');
-                e.preventDefault();
-                $('#barang').empty();
-                $('#barang').append('<option selected disabled>Pilih barang</option>');
-                let suplierid = $('#suplier').val();
-                $.ajax({
-                    type: "GET",
-                    url: "{{ url('get_lb') }}/"+suplierid,
-                    data: {'_token': '{{ csrf_token() }}'},
-                    success: function(response){
-                        if(response.status == 200) {
-                            var barang = response.data;
-                            barang.forEach(function(item){$('#barang').append(`<option value="`+item.id+`">`+item.nama_barang+`</option>`)});
-                            $('#suplier_id').val(suplierid);
-                            $('.info-suplier').show();
-                            $('.card-suplier').hide();
-                            $('.isi-suplier').html(`<h4>`+response.suplier.nama_perusahaan+` (`+response.suplier.kode_perusahaan+`)</h4>`);
-                        }
-                    },
-                    error: function(err){
-                        alert(err.messageJSON.message);
-                    }
-                });
-            });
-
-            $(document).on('click', '.ubah-suplier', function(e){
-                $('.card-suplier').show();
-                $('.info-suplier').hide();
-                $('#barang').empty();
-                $('#barang').append('<option selected disabled>Pilih barang</option>');
-                arrayBarang = [];
-                removeall();
-            });
-
             $(document).on('click', '#tambah', function(e) {
                 e.preventDefault();
                 let id = $('#barang').val();
@@ -263,11 +206,7 @@
                     success: function(response) {
                         removeall()
                         Swal.fire({title:"Selamat!",text:response.message,type:"success",confirmButtonColor:"#348cd4"});
-                        $('.card-suplier').show();
-                        $('.info-suplier').hide();
-                        $('#barang').empty();
-                        $('#barang').append('<option selected disabled>Pilih barang</option>');
-                        $('#suplier').val("Pilih Suplier");
+                        $('#barang').val('Pilih barang');
                         $('#tombol-simpan').removeClass('disabled');
                         $('#tombol-simpan').html('+ Simpan pembelian');
                     }

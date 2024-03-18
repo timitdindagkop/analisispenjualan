@@ -22,7 +22,7 @@
         }
     </style>
     <h2 class='tengah'>Pembelian Barang</h2>
-    <h3 class='tengah'>Pembelian barang di {{ $pembelian->suplier->nama_perusahaan }}</h3>
+    {{-- <h3 class='tengah'>Pembelian barang di {{ $pembelian->barang->nama_suplier }}</h3> --}}
     <p class='tengah'>Tertanggal : {{ date('d/m/Y', strtotime($pembelian->tanggal)) }}</p>
     <br/>
     <table>

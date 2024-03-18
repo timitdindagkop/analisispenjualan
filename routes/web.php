@@ -16,16 +16,13 @@ route::get('login', [AuthController::class, 'login'])->name('login')->middleware
 route::post('auth', [AuthController::class, 'authenticate'])->name('auth')->middleware('guest');
 route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
-route::resource('/sp', SuplierController::class)->middleware('auth');
 route::resource('/b', BarangController::class)->middleware('auth');
 route::resource('/pe', PembeliController::class)->middleware('auth');
-route::post('/json_sp', [SuplierController::class, 'json'])->name('json_sp')->middleware('auth');
 route::post('/json_b', [BarangController::class, 'json'])->name('json_b')->middleware('auth');
 route::post('/json_pe', [PembeliController::class, 'json'])->name('json_pe')->middleware('auth');
 
 // route pembelian barang
 route::resource('/pb', PembelianBarangController::class)->middleware('auth');
-route::get('/get_lb/{id}', [PembelianBarangController::class, 'show'])->middleware('auth');
 route::get('/print_pb/{id}', [PembelianBarangController::class, 'cetak'])->middleware('auth');
 route::post('/json_pb', [PembelianBarangController::class, 'json'])->name('json_pb')->middleware('auth');
 
