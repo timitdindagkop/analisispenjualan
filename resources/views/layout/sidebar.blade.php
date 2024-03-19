@@ -32,6 +32,7 @@
                     </a>
                 </li>
                 
+                @can('Owner')
                 <li>
                     <a href="{{ route('b.index') }}" class="waves-effect">
                         <i class="mdi mdi mdi-database"></i>
@@ -50,6 +51,8 @@
                         <li><a href="{{ route('pb.index') }}">Daftar Pembelian</a></li>
                     </ul>
                 </li>
+                @endcan
+
                 <li>
                     <a href="javascript: void(0);" class="waves-effect">
                         <i class="mdi mdi mdi-file-document-box-minus"></i>
@@ -83,7 +86,12 @@
                     </a>
                 </li>                                
                 @endcan
-                
+                <li>
+                    <a href="#" class="waves-effect" data-toggle="modal" data-target=".modalKeluar">
+                        <i class="mdi mdi mdi-logout"></i>
+                        <span> Keluar </span>
+                    </a>
+                </li>
             </ul>
 
         </div>

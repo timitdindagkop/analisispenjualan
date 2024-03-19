@@ -19,7 +19,9 @@
             </div>
         </div>
         <!-- end page title -->
-
+        
+        @can('Owner')
+        
         <div class="row">
             <div class="col-lg-3">
                 <div class="card-box">
@@ -99,6 +101,22 @@
                 </div>
             </div>
         </div>
+            
+        @endcan
+
+        @can('Karyawan')
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4>Selamat datang di toko Kedelai lil luk ma</h4>
+                            <p>Anda dapat menggunakan aplikasi ini untuk menginput transaksi pembeli, semua data tercatat pada sistem mulai dari penjualan sampai dengan cicilan pembeli, pastikan semua data terinput dengan benar </p>
+                            <a href="{{ route('pj.create') }}" class="btn btn-lg btn-primary">Klik untuk mulai bertransaksi</a>    
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endcan
     </div>
     <!-- end container-fluid -->
 @endsection
