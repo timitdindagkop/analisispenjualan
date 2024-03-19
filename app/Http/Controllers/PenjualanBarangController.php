@@ -23,17 +23,20 @@ class PenjualanBarangController extends Controller
         ]);
     }
 
-    public function data($data){
+    public function data($data)
+    {
+        // return $data;
         foreach ($data as $item) {
             $pembayarancicilan = CicilanPembeli::where('penjualanbarang_id', $item->id)->sum('jumlah_uang');
-            $pelunasan = $pembayarancicilan + $item->dp_cicilan - $item->total_uang;
+            // $pelunasan = $pembayarancicilan + $item->dp_cicilan - $item->total_uang;
             $result[] = [
                 'id' => $item->id,
-                'nama_pembeli' => $item->pembeli->nama_pembeli,
+                'nama' => $item->pembeli->nama_pembeli,
                 'tanggal' => $item->tanggal,
                 'total_barang' => $item->total_barang,
                 'total_uang' => $item->total_uang,
-                'status_cicilan' => $pelunasan == 0 ? 'Lunas' : $item->status_cicilan,
+                'status_cicilan' => $item->status_cicilan,
+                'status_bayar' => $item->status_bayar,
                 'dp_cicilan' => $item->dp_cicilan,
             ];
         }
@@ -43,9 +46,9 @@ class PenjualanBarangController extends Controller
 
     public function json()
     {
-        $columns = ['id', 'pembeli_id', 'tanggal', 'total_uang', 'total_barang', 'status_cicilan', 'dp_cicilan'];
+        $columns = ['id', 'pembeli_id', 'tanggal', 'total_uang', 'total_barang', 'status_cicilan', 'status_bayar', 'dp_cicilan'];
         $orderBy = $columns[request()->input("order.0.column")];
-        $data = PenjualanBarang::with(['pembeli'])->select('id', 'pembeli_id', 'tanggal', 'total_uang', 'total_barang', 'status_cicilan', 'dp_cicilan');
+        $data = PenjualanBarang::select('id', 'pembeli_id', 'tanggal', 'total_uang', 'total_barang', 'status_cicilan', 'status_bayar', 'dp_cicilan');
 
         if (request()->input("search.value")) {
             $data = $data->where(function ($query) {
@@ -63,7 +66,7 @@ class PenjualanBarangController extends Controller
             'draw' => request()->input('draw'),
             'recordsTotal' => $recordsTotal,
             'recordsFiltered' => $recordsFiltered,
-            'data' => $this->data($data)
+            'data' => $recordsTotal == 0 ? $data : $this->data($data)
         ]);
     }
 
@@ -108,15 +111,16 @@ class PenjualanBarangController extends Controller
         $penjualan->total_barang = $request->jumlah_total;
         $penjualan->total_uang = $request->grand_total;
         $penjualan->status_cicilan = $request->status_cicilan;
-        $penjualan->dp_cicilan = $request->status_cicilan == 'ya' ? $request->dp_cicilan : 0;
+        $penjualan->status_bayar = $request->status_cicilan == 'ya' ? "Belum lunas" : "Lunas";
+        $penjualan->dp_cicilan = $request->dp_cicilan == null ? 0 : preg_replace('/[^0-9]/', '', $request->dp_cicilan);
         $penjualan->save();
 
-        if ($request->status_cicilan == 'ya') {
+        if ($request->status_cicilan == 'ya' && $request->dp_cicilan !== null) {
             $cicilan = new CicilanPembeli();
             $cicilan->penjualanbarang_id = $penjualan->id;
             $cicilan->id = intval((microtime(true) * 1000));
             $cicilan->urutan_cicilan = 1;
-            $cicilan->jumlah_uang = $request->dp_cicilan;
+            $cicilan->jumlah_uang = $request->dp_cicilan == null ? 0 : preg_replace('/[^0-9]/', '', $request->dp_cicilan);
             $cicilan->save();
         }
 
@@ -156,20 +160,22 @@ class PenjualanBarangController extends Controller
         ]);
     }
 
-    public function getCicilan($id){
-            $cicilan = CicilanPembeli::select('id', 'urutan_cicilan', 'jumlah_uang', 'created_at')->where('penjualanbarang_id', $id)->get();
-            $penjualan = PenjualanBarang::find($id);
+    public function getCicilan($id)
+    {
+        $cicilan = CicilanPembeli::select('id', 'urutan_cicilan', 'jumlah_uang', 'created_at')->where('penjualanbarang_id', $id)->get();
+        $penjualan = PenjualanBarang::find($id);
 
-            $dp = $penjualan->dp_cicilan;
-            $total_uang = $penjualan->total_uang;
-            $total_cicilan = ($dp + $cicilan->sum('jumlah_uang')) - $total_uang; 
-            return response()->json([
-                'total_cicilan' => $total_cicilan,    
-                'data' => $cicilan
-            ]);
+        $total_uang = $penjualan->total_uang;
+        $total_cicilan = $total_uang - $cicilan->sum('jumlah_uang');
+        return response()->json([
+            'data' => $cicilan,
+            'cicilan' => $cicilan->sum('jumlah_uang'),
+            'kekurangan_uang' => $total_cicilan
+        ]);
     }
 
-    public function cetak($id){
+    public function cetak($id)
+    {
         return view('penjualan.print', [
             'title' => 'Print Penjualan',
             'data' => PenjualanBarang::with('pembeli')->select('id', 'pembeli_id', 'tanggal', 'total_barang', 'total_uang', 'status_cicilan', 'dp_cicilan')->findOrFail($id),
@@ -177,38 +183,69 @@ class PenjualanBarangController extends Controller
         ]);
     }
 
-    public function storeCicilan(Request $request){
+    public function storeCicilan(Request $request)
+    {
         $request->validate(
             [
                 'penjualanbarang_id' => 'required',
                 'jumlah_uang' => 'required',
             ]
-        ); 
+        );
+
 
         $cicilan = CicilanPembeli::where('penjualanbarang_id', $request->penjualanbarang_id)->get();
         $jumlah_cicilan = $cicilan->count();
+        $jumlah_uang = preg_replace('/[^0-9]/', '', $request->jumlah_uang);
+        $penjualanBarang = PenjualanBarang::find($request->penjualanbarang_id);
+
+        if (($cicilan->sum('jumlah_uang') + $jumlah_uang) > $penjualanBarang->total_uang) {
+            return response()->json(['message' => 'Pembayaran cicilan melebihi total uang'], 404);
+        }
 
         $cicilan_pembeli = new CicilanPembeli();
         $cicilan_pembeli->id = intval((microtime(true) * 1000));
         $cicilan_pembeli->penjualanbarang_id = $request->penjualanbarang_id;
-        $cicilan_pembeli->urutan_cicilan = $jumlah_cicilan+1;
-        $cicilan_pembeli->jumlah_uang = preg_replace('/[^0-9]/', '', $request->jumlah_uang);
+        $cicilan_pembeli->urutan_cicilan = $jumlah_cicilan + 1;
+        $cicilan_pembeli->jumlah_uang = $jumlah_uang;
         $cicilan_pembeli->save();
+
+        if (($penjualanBarang->dp_cicilan + $cicilan->sum('jumlah_uang') + $jumlah_uang) == $penjualanBarang->total_uang) {
+            $penjualanBarang->status_bayar = "Lunas";
+            $penjualanBarang->update();
+        }
         return response()->json(['message' => 'Cicilan berhasil di bayarkan']);
     }
 
-    public function edit($id)
+    public function destroyCicilan($id)
     {
-        //
-    }
-
-    public function update(Request $request, $id)
-    {
-        //
+        $cicilan = CicilanPembeli::find($id);
+        $penjualan = PenjualanBarang::find($cicilan->penjualanbarang_id);
+        $penjualan->status_bayar = "Belum lunas";
+        $penjualan->update();
+        $cicilan->delete();
+        return response()->json(['message' => 'Cicilan berhasil dihapus']);
     }
 
     public function destroy($id)
     {
-        //
+        $penjualan = PenjualanBarang::find($id);
+        $detailPenjualan = DetailPenjualanBarang::where('penjualanbarang_id', $id)->get();
+        foreach ($detailPenjualan as $dp) {
+
+            $barang = Barang::find($dp->barang_id);
+            $stok_barang = $barang->stok_barang;
+            $barang->stok_barang = $stok_barang + $dp->jumlah;
+            $barang->update();
+
+            $history = new HistoriBarang();
+            $history->kategori = "hapus_penjualan";
+            $history->barang_id = $barang->id;
+            $history->nama_barang = $barang->nama_barang;
+            $history->jumlah = $dp->jumlah;
+            $history->harga_barang = $dp->harga;
+            $history->save();
+        }
+        $penjualan->delete();
+        return response()->json(['message' => 'Data penjualan barang berhasil di hapus']);
     }
 }

@@ -10,7 +10,7 @@ class PenjualanBarang extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
-    
+
     protected $primaryKey = 'id';
     public $incrementing = false;
 
@@ -19,7 +19,8 @@ class PenjualanBarang extends Model
         return $this->hasMany(DetailPenjualanBarang::class);
     }
 
-    public function pembeli(){
-        return $this->belongsTo(Pembeli::class);
+    public function pembeli()
+    {
+        return $this->belongsTo(Pembeli::class, 'pembeli_id');
     }
 }

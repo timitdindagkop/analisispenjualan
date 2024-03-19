@@ -31,23 +31,18 @@
                         <span> Dashboard </span>
                     </a>
                 </li>
-
+                
                 <li>
-                    <a href="javascript: void(0);" class="waves-effect">
+                    <a href="{{ route('b.index') }}" class="waves-effect">
                         <i class="mdi mdi mdi-database"></i>
-                        <span> Master Data </span>
-                        <span class="menu-arrow"></span>
+                        <span> Master Barang </span>
                     </a>
-                    <ul class="nav-second-level" aria-expanded="false">
-                        <li><a href="{{ route('b.index') }}">Data Barang</a></li>
-                        <li><a href="{{ route('pe.index') }}">Data Pembeli</a></li>
-                    </ul>
                 </li>
 
                 <li>
                     <a href="javascript: void(0);" class="waves-effect">
                         <i class="mdi mdi mdi-file-document-box-plus"></i>
-                        <span> Master Pembelian </span>
+                        <span> Master Stok Barang </span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul class="nav-second-level" aria-expanded="false">
@@ -62,6 +57,7 @@
                         <span class="menu-arrow"></span>
                     </a>
                     <ul class="nav-second-level mm-collapse" aria-expanded="false">
+                        <li><a href="{{ route('pe.index') }}">Data Pembeli</a></li>
                         <li><a href="{{ route('pj.create') }}">Input Penjualan</a></li>
                         <li><a href="{{ route('pj.index') }}">Data Penjualan</a></li>
                     </ul>

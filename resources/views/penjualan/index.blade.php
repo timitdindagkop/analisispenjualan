@@ -42,8 +42,9 @@
                                             {{-- <th width="15%">Kode Penjualan</th> --}}
                                             <th width="15%">Pembeli</th>
                                             <th width="15%">Tanggal</th>
-                                            <th width="15%">Total Barang (Kiloan)</th>
-                                            <th width="20%">Total Uang</th>
+                                            <th width="10%">Qty</th>
+                                            <th width="15%">Total Uang</th>
+                                            <th width="10%">Bayar</th>
                                             <th width="10%">Cicilan</th>
                                             <th width="5%">#</th>
                                         </tr>
@@ -110,7 +111,7 @@
                     "targets": "_all",
                     "defaultContent": "-",
                     "render": function(data, type, row, meta){
-                    return row.nama_pembeli
+                    return row.nama
                     }
                 },
                 {
@@ -128,7 +129,7 @@
                     "targets": "_all",
                     "defaultContent": "-",
                     "render": function(data, type, row, meta){
-                    return row.total_barang
+                    return row.total_barang + " kilo"
                     }
                 },
                 {
@@ -136,6 +137,13 @@
                     "defaultContent": "-",
                     "render": function(data, type, row, meta){
                     return 'Rp. '+rupiah(row.total_uang)
+                    }
+                },
+                {
+                    "targets": "_all",
+                    "defaultContent": "-",
+                    "render": function(data, type, row, meta){
+                        return row.status_bayar
                     }
                 },
                 {
@@ -171,7 +179,6 @@
             ]
         });
 
-        // belum fix
         $(document).on('click', '.hapusdata', function(e) {
             let idhapus = $(this).data('id');
             Swal.fire({
@@ -186,7 +193,7 @@
                 if (result.value) {
                     $.ajax({
                         type: "DELETE",
-                        url: "{{ route('pb.index') }}/" + idhapus,
+                        url: "{{ route('pj.index') }}/" + idhapus,
                         data: {'_token': '{{ csrf_token() }}'},
                         dataType: 'json',
                         success: function(response) {

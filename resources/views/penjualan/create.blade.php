@@ -116,8 +116,16 @@
                                 </table>
                             </div>
                             <div class="d-flex justify-content-between">
-                                <div>
-                                    <input type="date" name="tanggal" id="tanggal" class="form-control" value="{{ date('Y-m-d') }}" style="display:none">
+                                <div class="row" id="tanggal_status" style="display:none">
+                                    <div class="col-12">
+                                        <input type="date" name="tanggal" id="tanggal" class="form-control" value="{{ date('Y-m-d') }}">
+                                    </div>
+                                    <div class="col-6">
+                                        {{-- <select name="status_bayar" id="status_bayar" class="form-control">
+                                            <option value="Belum lunas">Belum lunas</option>    
+                                            <option value="Lunas">Lunas</option>    
+                                        </select>     --}}
+                                    </div>
                                 </div>
                                 <button type="submit" class="btn btn-lg btn-success" id="tombol-simpan" style="display:none">+ Simpan penjualan</button>
                             </div>
@@ -148,6 +156,29 @@
                 icon: icon,
                 title: title,
             });
+        }
+
+        var dp_cicil = document.getElementById("dp_cicil");
+        dp_cicil.addEventListener("keyup", function(e) {
+            $('#dp_cicil').removeClass("is-invalid");
+            dp_cicil.value = convertRupiah(this.value, "Rp. ");
+        });
+
+        // membuat format rupiah
+        function convertRupiah(angka, prefix) {
+            var number_string = angka.replace(/[^,\d]/g, "").toString(),
+                split = number_string.split(","),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ? "." : "";
+                rupiah += separator + ribuan.join(".");
+            }
+
+            rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
+            return prefix == undefined ? rupiah : rupiah ? prefix + rupiah : "";
         }
 
         $(document).ready(() => {
@@ -200,7 +231,7 @@
                 let pembeli = document.getElementById("pembeli");
                 let v_pembeli = pembeli.value;
                 let t_pembeli = pembeli.options[pembeli.selectedIndex].text;
-                $('#dp_cicilan').val(dp_cicil);
+                $('#dp_cicilan').val(dp_cicil.replace(/[^0-9\.]/g,''));
                 $('#pembeli_id').val(v_pembeli);
                 $('#tambah').attr("disabled", false);
                 $('.card-pembeli').hide();
@@ -256,7 +287,7 @@
                         $('.grand-total').html('<h4>Rp. '+rupiah(grand_total)+'</h4> <input type="hidden" name="grand_total" value="'+grand_total+'"><input type="hidden" name="jumlah_total" value="'+jumlah_total+'">');
                         $('#form-pembelian #idbarang').val(JSON.stringify(arrayBarang));
                         $('tfoot').show();
-                        $('#tanggal').show();
+                        $('#tanggal_status').show();
                         $('#tombol-simpan').show();
                     }
                 });
@@ -314,6 +345,7 @@
                         $('#cicilan').prop("checked", false);
                         $('.card-pembeli').show();
                         $('.info-pembeli').hide();
+                        $('#tanggal_status').hide();
                         $('#barang').val('Pilih barang');
                         $('#pembeli').val("Pilih pembeli");
                         $('#tombol-simpan').removeClass('disabled');

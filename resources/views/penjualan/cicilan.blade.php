@@ -37,8 +37,9 @@
                         <hr />
                         Status Cicilan : <span class="badge badge-primary status">{{ $data->status_cicilan }}</span> <br />
                         DP Cicilan : Rp. {{ number_format($data->dp_cicilan,0,',','.') }}<br />
-                        Cicilan : Rp. {{ number_format($total_cicilan,0,',','.') }} <br />
-                        Kekurangan uang : {{ number_format($data->total_uang-$data->dp_cicilan-$total_cicilan,0,',','.') }}
+                        Cicilan : <span id="jumlah_cicilan">Rp. 0</span> <br />
+                        Kekurangan uang : <span id="kekurangan_uang">Rp. 0</span>
+                        <input type="hidden" id="uang" name="uang">
                     </div>
                 </div>
             </div>
@@ -92,9 +93,10 @@
                                     <table class="table table-bordered mb-0">
                                         <thead>
                                             <tr class="text-center">
-                                                <th>Cicilan ke</th>
-                                                <th>Jumlah Uang</th>
-                                                <th>Tanggal</th>
+                                                <th width="15%">Cicilan ke</th>
+                                                <th width="40%">Jumlah Uang</th>
+                                                <th width="35%">Tanggal</th>
+                                                <th width="10%">#</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -160,13 +162,17 @@
                 type: "GET",
                 url: "{{ url('get_c') }}/"+"{{ $data->id }}",
                 success: function (response){
-                    if (response.total_cicilan == 0) {
+                    if (response.kekurangan_uang == 0) {
                         $('.bayar_cicilan').hide();
                         $('.bayar_cicilan2').show();
                         $('.status').removeClass('badge-primary');
                         $('.status').addClass('badge-success');
-                        $('.status').html('Lunas')
+                        $('.status').html('Lunas');
                     }
+
+                    $('#jumlah_cicilan').text("Rp. "+rupiah(response.cicilan));
+                    $('#kekurangan_uang').text("Rp. "+rupiah(response.kekurangan_uang));
+                    $('#uang').val(response.kekurangan_uang);
 
                     let data = response.data;
                     let body = '';
@@ -190,6 +196,7 @@
                                 <td>`+params.urutan_cicilan+`</td>
                                 <td>`+rupiah(params.jumlah_uang)+`</td>
                                 <td>`+hari+`/`+bulan+`/`+tahun+`</td>
+                                <td><a class="btn btn-sm btn-danger text-white hapusdata" data-id="`+params.id+`">Hapus</a></td>
                             </tr>`
                             $('#cicilan table tbody').append(body);
                         });    
@@ -207,12 +214,42 @@
                 dataType: 'json',
                 success: function(response){
                     $('#modalcicilan').modal('hide');
+                    $('#jumlah_uang').val("");
                     loaddata();
+                    console.log(response);
                 }, 
                 error: function(err){
-                    Swal.fire({title:"Mohon maaf!",text:"Nominal uang harus disi",type:"warning",confirmButtonColor:"#348cd4"})
+                    Swal.fire({title:"Mohon maaf!",text:"Cicilan tidak berhasil di input, pastikan data nominal yang diisi dengan benar",type:"warning",confirmButtonColor:"#348cd4"})
+                console.log(err);    
                 }
             });
+        });
+
+        $(document).on('click', '.hapusdata', function(e) {
+            let idhapus = $(this).data('id');
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: "Anda akan menghapus data ini!",
+                type: 'warning',
+                showCancelButton:!0,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        type: "DELETE",
+                        url: "{{ url('/del_cicilan') }}/" + idhapus,
+                        data: {'_token': '{{ csrf_token() }}'},
+                        dataType: 'json',
+                        success: function(response) {
+                            Swal.fire("Deleted!",response.message,"success")
+                            loaddata();
+                        }
+                    });
+
+                }
+            })
         });
     </script>
 @endpush

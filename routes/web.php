@@ -32,6 +32,7 @@ route::get('/get_c/{id}', [PenjualanBarangController::class, 'getCicilan'])->nam
 route::get('/print_pj/{id}', [PenjualanBarangController::class, 'cetak'])->name('print_pj')->middleware('auth');
 route::post('/json_pj', [PenjualanBarangController::class, 'json'])->middleware('auth');
 route::post('/store_cicilan', [PenjualanBarangController::class, 'storeCicilan'])->middleware('auth');
+route::delete('/del_cicilan/{id}', [PenjualanBarangController::class, 'destroyCicilan'])->name('del_cicilan')->middleware('auth');
 route::resource('/pj', PenjualanBarangController::class)->middleware('auth');
 
 // laporan
