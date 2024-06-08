@@ -24,45 +24,6 @@
         <!-- end page title -->
 
         <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-header bg-secondary">
-                        <h3 class="card-title text-white">Data pembeli</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-lg-12 info-pembeli" style="display: none">
-                                <div class="isi-pembeli"></div>
-                                <button class="btn btn-lg btn-danger ubah-pembeli">Ubah pilihan pembeli</button>
-                            </div>
-                            <div class="col-lg-12 card-pembeli">
-                                <div class="row">
-                                    <div class="col-lg-5 mb-3">
-                                        <select name="pembeli" id="pembeli" class="form-control">
-                                            <option selected disabled>Pilih pembeli</option>
-                                            @foreach ($pembeli as $s)
-                                                <option value="{{ $s->id }}">{{ $s->nama_pembeli }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" id="cicilan" name="cicilan" value="ya">
-                                            <label class="form-check-label" for="cicilan">Ada cicilan ?</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <input type="text" class="form-control" name="dp_cicil" id="dp_cicil" placeholder="Masukan DP cicilan" readonly>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <button class="btn btn-lg btn-dark mt-2" id="pilih-pembeli">Pilih pembeli</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <div class="col-lg-4">
                 <div class="card">
@@ -70,13 +31,26 @@
                         <h3 class="card-title text-white">Data Barang</h3>
                     </div>
                     <div class="card-body">
-                        <select name="barang" id="barang" class="form-control">
+                        <select name="pembeli" id="pembeli" class="form-control pembelis">
+                            <option selected disabled>Pilih pembeli</option>
+                            @foreach ($pembeli as $s)
+                                <option value="{{ $s->id }}">{{ $s->nama_pembeli }}</option>
+                            @endforeach
+                        </select>
+
+                        <div class="d-flex justify-content-end mb-3 pembelis">
+                            <button class="btn btn-dark mt-2" id="pilih-pembeli">Pilih pembeli</button>
+                        </div>
+
+
+
+                        <select name="barang" id="barang" class="form-control barangs">
                             <option selected disabled>Pilih barang</option>
                             @foreach ($barang as $b)
                                 <option value="{{ $b->id }}">{{ $b->nama_barang }}</option>
                             @endforeach
                         </select>
-                        <div class="d-flex justify-content-end mt-3">
+                        <div class="d-flex justify-content-end mt-3 barangs">
                             <button class="btn btn-primary" id="tambah" disabled>Tambah barang</button>
                         </div>
                     </div>
@@ -107,7 +81,7 @@
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
-                                    <tfoot style="display:none">
+                                    <tfoot>
                                         <tr>
                                             <td colspan="4"><h4>Total</h4></td>
                                             <td class="grand-total">Rp. </td>
@@ -115,8 +89,19 @@
                                     </tfoot>
                                 </table>
                             </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-8">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="cicilan" name="cicilan" value="ya">
+                                        <label class="form-check-label" for="cicilan">Ada cicilan ?</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <input type="text" class="form-control" name="dp_cicil" id="dp_cicil" placeholder="Masukan DP cicilan" readonly>
+                                </div>
+                            </div>
                             <div class="d-flex justify-content-between">
-                                <div class="row" id="tanggal_status" style="display:none">
+                                <div class="row" id="tanggal_status">
                                     <div class="col-12">
                                         <input type="date" name="tanggal" id="tanggal" class="form-control" value="{{ date('Y-m-d') }}">
                                     </div>
@@ -127,7 +112,7 @@
                                         </select>     --}}
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-lg btn-success" id="tombol-simpan" style="display:none">+ Simpan penjualan</button>
+                                <button type="submit" class="btn btn-lg btn-success" id="tombol-simpan">+ Simpan penjualan</button>
                             </div>
                         </form>
                     </div>
@@ -190,8 +175,7 @@
                 $('#form-pembelian table tbody').html('');
                 $('.grand-total').html('');
                 $('#form-pembelian table tfoot').hide();
-                $('#tombol-simpan').hide();
-                $('#tanggal').hide();
+                $('.tanggalandsimpan').hide();
                 countGrandTotal();
             }
 
@@ -203,17 +187,6 @@
                 if (grand_total <= 0) return $('#form-pembelian table tfoot').hide();
                 $('.grand-total').html('<h4>Rp.'+rupiah(grand_total)+'</h4><input type="hidden" name="grand_total" value="'+grand_total+'"><input type="hidden" name="jumlah_total" value="'+jumlah_total+'">')
             }
-
-            $(document).on('click', '#cicilan', function(e){
-                var cek = $('input[name="cicilan"]:checked');
-                if (cek.length > 0) {
-                    $('#jumlah_cicil').attr("readonly", false);
-                    $('#dp_cicil').attr("readonly", false);                    
-                } else {
-                    $('#jumlah_cicil').attr("readonly", true);
-                    $('#dp_cicil').attr("readonly", true);
-                }
-            });
 
             $(document).on('click', '#pilih-pembeli',function(e){
                 let pembeliid = $('#pembeli').val();
@@ -228,10 +201,10 @@
                 }
 
                 // mengambil data select pembeli
+                // $('#dp_cicilan').val(dp_cicil.replace(/[^0-9\.]/g,''));
                 let pembeli = document.getElementById("pembeli");
                 let v_pembeli = pembeli.value;
                 let t_pembeli = pembeli.options[pembeli.selectedIndex].text;
-                $('#dp_cicilan').val(dp_cicil.replace(/[^0-9\.]/g,''));
                 $('#pembeli_id').val(v_pembeli);
                 $('#tambah').attr("disabled", false);
                 $('.card-pembeli').hide();
@@ -253,6 +226,17 @@
                 $('#dp_cicilan').val(null);
                 arrayBarang = [];
                 removeall();
+            });
+
+            $(document).on('click', '#cicilan', function(e){
+                var cek = $('input[name="cicilan"]:checked');
+                if (cek.length > 0) {
+                    $('#jumlah_cicil').attr("readonly", false);
+                    $('#dp_cicil').attr("readonly", false);                    
+                } else {
+                    $('#jumlah_cicil').attr("readonly", true);
+                    $('#dp_cicil').attr("readonly", true);
+                }
             });
 
             $(document).on('click', '#tambah', function(e) {
@@ -287,8 +271,7 @@
                         $('.grand-total').html('<h4>Rp. '+rupiah(grand_total)+'</h4> <input type="hidden" name="grand_total" value="'+grand_total+'"><input type="hidden" name="jumlah_total" value="'+jumlah_total+'">');
                         $('#form-pembelian #idbarang').val(JSON.stringify(arrayBarang));
                         $('tfoot').show();
-                        $('#tanggal_status').show();
-                        $('#tombol-simpan').show();
+                        $('#tanggalandsimpan').show();
                     }
                 });
             });
@@ -345,7 +328,7 @@
                         $('#cicilan').prop("checked", false);
                         $('.card-pembeli').show();
                         $('.info-pembeli').hide();
-                        $('#tanggal_status').hide();
+                        $('#tanggal_status').show();
                         $('#barang').val('Pilih barang');
                         $('#pembeli').val("Pilih pembeli");
                         $('#tombol-simpan').removeClass('disabled');

@@ -154,7 +154,7 @@ class PenjualanBarangController extends Controller
     {
         return view('penjualan.cicilan', [
             'title' => 'Cicilan pembeli',
-            'data' => PenjualanBarang::with('pembeli')->select('id', 'pembeli_id', 'tanggal', 'total_barang', 'total_uang', 'status_cicilan', 'dp_cicilan')->findOrFail($id),
+            'data' => PenjualanBarang::with('pembeli')->select('id', 'pembeli_id', 'tanggal', 'total_barang', 'total_uang', 'status_cicilan', 'status_bayar', 'dp_cicilan')->findOrFail($id),
             'detail' => DetailPenjualanBarang::with('barang')->select('barang_id', 'jumlah', 'harga')->where('penjualanbarang_id', $id)->get(),
             'total_cicilan' => CicilanPembeli::where('penjualanbarang_id', $id)->sum('jumlah_uang')
         ]);

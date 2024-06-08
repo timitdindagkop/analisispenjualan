@@ -35,7 +35,8 @@
                         Total jumlah barang : {{ $data->total_barang }} Kilo<br />
                         Total harus bayar : Rp. {{ number_format($data->total_uang,0,',','.') }}<br />
                         <hr />
-                        Status Cicilan : <span class="badge badge-primary status">{{ $data->status_cicilan }}</span> <br />
+                        {{-- Status Cicilan : <span class="badge badge-primary">{{ $data->status_cicilan }}</span> <br /> --}}
+                        Status Bayar : <span class="badge status"></span> <br />
                         DP Cicilan : Rp. {{ number_format($data->dp_cicilan,0,',','.') }}<br />
                         Cicilan : <span id="jumlah_cicilan">Rp. 0</span> <br />
                         Kekurangan uang : <span id="kekurangan_uang">Rp. 0</span>
@@ -165,9 +166,12 @@
                     if (response.kekurangan_uang == 0) {
                         $('.bayar_cicilan').hide();
                         $('.bayar_cicilan2').show();
-                        $('.status').removeClass('badge-primary');
                         $('.status').addClass('badge-success');
                         $('.status').html('Lunas');
+                    }else{
+                        $('.status').removeClass('badge-success');
+                        $('.status').addClass('badge-danger');
+                        $('.status').html('Belum Lunas');
                     }
 
                     $('#jumlah_cicilan').text("Rp. "+rupiah(response.cicilan));
