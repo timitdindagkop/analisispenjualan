@@ -38,20 +38,21 @@
                             @endforeach
                         </select>
 
-                        <div class="d-flex justify-content-end mb-3 pembelis">
+                        <div class="d-flex justify-content-end mb-3">
                             <button class="btn btn-dark mt-2" id="pilih-pembeli">Pilih pembeli</button>
+                            <button class="btn btn-danger mt-2" id="ubah-pembeli" style="display: none">Ubah Pembeli</button>
                         </div>
 
 
 
-                        <select name="barang" id="barang" class="form-control barangs">
+                        <select name="barang" id="barang" class="form-control barangs" disabled>
                             <option selected disabled>Pilih barang</option>
                             @foreach ($barang as $b)
                                 <option value="{{ $b->id }}">{{ $b->nama_barang }}</option>
                             @endforeach
                         </select>
-                        <div class="d-flex justify-content-end mt-3 barangs">
-                            <button class="btn btn-primary" id="tambah" disabled>Tambah barang</button>
+                        <div class="d-flex justify-content-end mt-3">
+                            <button class="btn btn-primary barangs" id="tambah" disabled>Tambah barang</button>
                         </div>
                     </div>
                 </div>
@@ -67,8 +68,6 @@
                             @csrf
                             <input type="hidden" id="idbarang">
                             <input type="hidden" id="pembeli_id" name="pembeli_id">
-                            <input type="hidden" id="status_cicilan" name="status_cicilan">
-                            <input type="hidden" id="dp_cicilan" name="dp_cicilan">
                             <div class="table-responsive">
                                 <table class="table table-striped mb-0" id="tabel-barang">
                                     <thead>
@@ -84,7 +83,7 @@
                                     <tfoot>
                                         <tr>
                                             <td colspan="4"><h4>Total</h4></td>
-                                            <td class="grand-total">Rp. </td>
+                                            <td class="grand-total">Rp. 0</td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -97,7 +96,7 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
-                                    <input type="text" class="form-control" name="dp_cicil" id="dp_cicil" placeholder="Masukan DP cicilan" readonly>
+                                    <input type="text" class="form-control" name="dp_cicilan" id="dp_cicilan" placeholder="Masukan DP cicilan" value="Rp. 0" readonly>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between">
@@ -112,7 +111,7 @@
                                         </select>     --}}
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-lg btn-success" id="tombol-simpan">+ Simpan penjualan</button>
+                                <button type="submit" class="btn btn-lg btn-success" id="tombol-simpan" disabled>+ Simpan penjualan</button>
                             </div>
                         </form>
                     </div>
@@ -143,9 +142,9 @@
             });
         }
 
-        var dp_cicil = document.getElementById("dp_cicil");
+        var dp_cicil = document.getElementById("dp_cicilan");
         dp_cicil.addEventListener("keyup", function(e) {
-            $('#dp_cicil').removeClass("is-invalid");
+            $('#dp_cicilan').removeClass("is-invalid");
             dp_cicil.value = convertRupiah(this.value, "Rp. ");
         });
 
@@ -174,8 +173,7 @@
                 arrayBarang = [];
                 $('#form-pembelian table tbody').html('');
                 $('.grand-total').html('');
-                $('#form-pembelian table tfoot').hide();
-                $('.tanggalandsimpan').hide();
+                // $('#form-pembelian table tfoot').hide();
                 countGrandTotal();
             }
 
@@ -184,46 +182,39 @@
                 let jumlah_total = 0;
                 arrayBarang.forEach(gt => grand_total = grand_total + parseInt(gt.total));
                 arrayBarang.forEach(jt => jumlah_total = jumlah_total + parseInt(jt.jumlah));
-                if (grand_total <= 0) return $('#form-pembelian table tfoot').hide();
-                $('.grand-total').html('<h4>Rp.'+rupiah(grand_total)+'</h4><input type="hidden" name="grand_total" value="'+grand_total+'"><input type="hidden" name="jumlah_total" value="'+jumlah_total+'">')
+                // if (grand_total <= 0) return $('#form-pembelian table tfoot').hide();
+                $('.grand-total').html('<h4>Rp. '+rupiah(grand_total)+'</h4><input type="hidden" name="grand_total" value="'+grand_total+'"><input type="hidden" name="jumlah_total" value="'+jumlah_total+'">')
             }
 
             $(document).on('click', '#pilih-pembeli',function(e){
-                let pembeliid = $('#pembeli').val();
-                if(!pembeliid) return alert('Mohon pilih pembeli');
-                var cek = $('input[name="cicilan"]:checked');
-                let jumlah_cicil = $('#jumlah_cicil').val();
-                let dp_cicil = $('#dp_cicil').val();
-                if (cek.length > 0) {
-                    $('#status_cicilan').val('ya');
-                } else {
-                    $('#status_cicilan').val('tidak');
-                }
-
+                
                 // mengambil data select pembeli
                 // $('#dp_cicilan').val(dp_cicil.replace(/[^0-9\.]/g,''));
-                let pembeli = document.getElementById("pembeli");
-                let v_pembeli = pembeli.value;
-                let t_pembeli = pembeli.options[pembeli.selectedIndex].text;
-                $('#pembeli_id').val(v_pembeli);
-                $('#tambah').attr("disabled", false);
-                $('.card-pembeli').hide();
-                $('.info-pembeli').show();
+                // let pembeli = document.getElementById("pembeli");
+                // let v_pembeli = pembeli.value;
+                // let t_pembeli = pembeli.options[pembeli.selectedIndex].text;
+                
+                let pembeliid = $('#pembeli').val();
+                if(!pembeliid) return alert('Mohon pilih pembeli');
+                $('#pembeli_id').val(pembeliid);
+                $('#pilih-pembeli').hide();
+                $('#ubah-pembeli').show();
+                $('.pembelis').attr("disabled", true);
+                $('.barangs').attr("disabled", false);
+                $('#tombol-simpan').attr("disabled", false);
             });
 
-            $(document).on('click', '.ubah-pembeli', function(e){
-                $('.card-pembeli').show();
-                $('.info-pembeli').hide();
+            $(document).on('click', '#ubah-pembeli', function(e){
+                $('#pilih-pembeli').show();
+                $('#ubah-pembeli').hide();
                 $('#barang').val('Pilih barang');
                 $('#pembeli').val('Pilih pembeli');
-                $('#jumlah_cicil').val(null);
-                $('#dp_cicil').val(null);
-                $('#dp_cicil').attr("readonly", true);
                 $('#cicilan').prop("checked", false);
-
                 $('#pembeli_id').val(null);
                 $('#status_cicilan').val(null);
                 $('#dp_cicilan').val(null);
+                $('.pembelis').attr('disabled', false);
+                $('.barangs').attr('disabled', true);
                 arrayBarang = [];
                 removeall();
             });
@@ -231,11 +222,11 @@
             $(document).on('click', '#cicilan', function(e){
                 var cek = $('input[name="cicilan"]:checked');
                 if (cek.length > 0) {
-                    $('#jumlah_cicil').attr("readonly", false);
-                    $('#dp_cicil').attr("readonly", false);                    
-                } else {
-                    $('#jumlah_cicil').attr("readonly", true);
-                    $('#dp_cicil').attr("readonly", true);
+                    $('#dp_cicilan').val('')
+                    $('#dp_cicilan').attr("readonly", false);                    
+                    } else {
+                    $('#dp_cicilan').val('Rp. 0')
+                    $('#dp_cicilan').attr("readonly", true);
                 }
             });
 
@@ -289,7 +280,7 @@
                     alert("Permintaan melebihi stok barang");     
                     $(this).val(stok_barang)    
                 }
-                $('#form-pembelian #' + id + ' td:last').html('Rp.' + rupiah(total));
+                $('#form-pembelian #' + id + ' td:last').html('Rp. ' + rupiah(total));
                 objIndex = arrayBarang.findIndex((obj => obj.id == id));
                 arrayBarang[objIndex].jumlah = jumlah;
                 arrayBarang[objIndex].total = total;
@@ -313,7 +304,7 @@
 
             $('#form-pembelian').on('submit', function(e) {
                 e.preventDefault();
-                $('#tombol-simpan').addClass('disabled');
+                $('#tombol-simpan').attr('disabled', true);
                 $('#tombol-simpan').html(`<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Loading...`);
                 $.ajax({
                     url: "{{ route('pj.index') }}",
@@ -323,15 +314,13 @@
                     success: function(response) {
                         removeall()
                         Swal.fire({title:"Selamat!",text:response.message,type:"success",confirmButtonColor:"#348cd4"});
-                        $('#dp_cicil').val(null);
-                        $('#dp_cicil').attr("readonly", true);
-                        $('#cicilan').prop("checked", false);
-                        $('.card-pembeli').show();
-                        $('.info-pembeli').hide();
-                        $('#tanggal_status').show();
+                        $('#dp_cicilan').val('Rp. 0');
                         $('#barang').val('Pilih barang');
                         $('#pembeli').val("Pilih pembeli");
-                        $('#tombol-simpan').removeClass('disabled');
+                        $('.barangs').attr('disabled', true);
+                        $('.pembelis').attr('disabled', false);
+                        $('#dp_cicilan').attr("readonly", true);
+                        $('#cicilan').prop("checked", false);
                         $('#tombol-simpan').html('+ Simpan penjualan');
                     }
                 });

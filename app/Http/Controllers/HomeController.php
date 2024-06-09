@@ -85,40 +85,15 @@ class HomeController extends Controller
         //     $no++;
         // }
         
-
-        $tanggal_1 = date('Y-m-d', strtotime('-1 day'));
-        $tanggal_2 = date('Y-m-d', strtotime('-2 day'));
-        $tanggal_3 = date('Y-m-d', strtotime('-3 day'));
-        $tanggal_4 = date('Y-m-d', strtotime('-4 day'));
-        $tanggal_5 = date('Y-m-d', strtotime('-5 day'));
-        
-        $data = [
-            [
-            'no' => 1,
-            'bulan' => date('d-m-Y', strtotime('-1 day')),
-            'penjualan' => PenjualanBarang::whereDate('tanggal', $tanggal_1)->sum('total_barang'),
-            ],
-            [
-            'no' => 2,
-            'bulan' => date('d-m-Y', strtotime('-2 day')),
-            'penjualan' => PenjualanBarang::whereDate('tanggal', $tanggal_2)->sum('total_barang'),
-            ],
-            [
-            'no' => 3,
-            'bulan' => date('d-m-Y', strtotime('-3 day')),
-            'penjualan' => PenjualanBarang::whereDate('tanggal', $tanggal_3)->sum('total_barang'),
-            ],
-            [
-            'no' => 4,
-            'bulan' => date('d-m-Y', strtotime('-4 day')),
-            'penjualan' => PenjualanBarang::whereDate('tanggal', $tanggal_4)->sum('total_barang'),
-            ],
-            [
-            'no' => 5,
-            'bulan' => date('d-m-Y', strtotime('-5 day')),
-            'penjualan' => PenjualanBarang::whereDate('tanggal', $tanggal_5)->sum('total_barang'),
-            ],
-        ];
+        for($i = 1; $i < 21 ; $i++) {
+            $day = "-". $i . " day";
+            $tanggal = date('Y-m-d', strtotime($day));
+            $data[] = [
+                'no' => $i,
+                'bulan' => date('d-m-Y', strtotime($day)),
+                'penjualan' => PenjualanBarang::whereDate('tanggal', $tanggal)->sum('total_barang'),                
+            ];
+        }
 
         // return $data;
 

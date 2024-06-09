@@ -145,8 +145,8 @@
                             </table>
                         </div>
                         <?php $nilaiY = $konstanta_a + ($koefisien_b*$totalx)  ?>
-                        <h4>Nilai dari persamaan dengan menggunakan metode regresi linear sederhana adalah sebagai berikut <br /> Y = <strong>{{ $nilaiY }}</strong> <br />
-                        Estimasi Stok barang pada besok hari tanggal {{ date('d-m-Y', strtotime('+1 day')) }} adalah sekitar {{ $nilaiY }} Kilo</h4>
+                        <h5>Nilai dari persamaan dengan menggunakan metode regresi linear sederhana adalah sebagai berikut dimana Y = <strong>{{ round($nilaiY) }}</strong> <br />
+                        Maka estimasi Stok barang pada besok hari tanggal {{ date('d-m-Y', strtotime('+1 day')) }} adalah sekitar {{ round($nilaiY) }} Kilo</h5>
                     </div>
                 </div>
             </div>
