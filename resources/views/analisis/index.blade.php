@@ -30,7 +30,7 @@
                                 <thead>
                                     <tr class="text-center">
                                         <th width="5%">#</th>
-                                        <th width="30%">Bulan(X)</th>
+                                        <th width="30%">Tanggal(X)</th>
                                         <th width="65%">Jumlah Barang(Y)</th>
                                     </tr>
                                 </thead>
