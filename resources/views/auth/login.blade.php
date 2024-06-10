@@ -33,10 +33,18 @@
                                 <h4 class="text-white text-center mb-0">Toko Kedelai Lil Luk Ma</h4>
                             </div>
                             <div class="card-body p-4 mt-2">
+                                @if (session()->has('loginError'))
+                                    <div class="alert alert-danger alert-dismissible fade show">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                        {{ session('loginError') }}
+                                    </div>
+                                @endif
                                 <form action="{{ url('auth') }}" method="post" class="p-3">
                                     @csrf
                                     <div class="form-group mb-3">
-                                        <input class="form-control" type="text" name="username" id="username" required="" placeholder="Username">
+                                        <input class="form-control" type="text" name="username" id="username" required="" placeholder="Username" value="{{ old('username') }}">
                                     </div>
 
                                     <div class="form-group mb-3">
