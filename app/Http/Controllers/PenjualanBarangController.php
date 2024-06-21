@@ -104,7 +104,7 @@ class PenjualanBarangController extends Controller
             ]
         );
 
-        $status_cicilan = $request->status_cicilan == null ? 'tidak' : $request->status_cicilan;
+        $status_cicilan = $request->cicilan == null ? 'tidak' : $request->cicilan;
 
         $penjualan = new PenjualanBarang();
         $penjualan->id = intval((microtime(true) * 10000));
@@ -113,11 +113,11 @@ class PenjualanBarangController extends Controller
         $penjualan->total_barang = $request->jumlah_total;
         $penjualan->total_uang = $request->grand_total;
         $penjualan->status_cicilan = $status_cicilan;
-        $penjualan->status_bayar = $request->status_cicilan == 'ya' ? "Belum lunas" : "Lunas";
+        $penjualan->status_bayar = $status_cicilan == 'ya' ? "Belum lunas" : "Lunas";
         $penjualan->dp_cicilan = $request->dp_cicilan == null ? 0 : preg_replace('/[^0-9]/', '', $request->dp_cicilan);
         $penjualan->save();
 
-        if ($request->status_cicilan == 'ya' && $request->dp_cicilan !== null) {
+        if ($status_cicilan == 'ya' && $request->dp_cicilan !== null) {
             $cicilan = new CicilanPembeli();
             $cicilan->penjualanbarang_id = $penjualan->id;
             $cicilan->id = intval((microtime(true) * 1000));

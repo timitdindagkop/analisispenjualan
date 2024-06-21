@@ -132,12 +132,12 @@
             labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"],
             datasets: [
                 {
-                    label: 'Transaksi Penjualan dan pembelian barang',
+                    label: 'Transaksi Penjualan barang',
                     data: [<?= $penjualan_chart ?>],
                     borderColor: 'rgb(45, 196, 192)',
                 },
                 {
-                    label: 'Transaksi Penjualan dan pembelian barang',
+                    label: 'Transaksi pembelian barang',
                     data: [<?= $pembelian_chat ?>],
                     borderColor: 'rgb(85, 136, 193)',
                 }
