@@ -13,6 +13,17 @@ class HomeController extends Controller
 {
     public function index(){
         $getbulan = $this->getBulan();
+        $tgl = [];
+        $uang = [];
+        $beli = [];
+        for($i = 0; $i < 7 ; $i++) {
+            $day = "-". $i . " day";
+            $tanggal = date('Y-m-d', strtotime($day));
+            array_push($tgl, '"'.date('d/m/Y', strtotime($day)).'"') ;
+            array_push($uang, PenjualanBarang::whereDate('tanggal', $tanggal)->sum('total_barang')) ;        
+            array_push($beli, PembelianBarang::whereDate('tanggal', $tanggal)->sum('total_barang')) ;        
+        }
+        // return implode(', ', $tgl);
         $penjualan_chart = [
             PenjualanBarang::whereYear('tanggal', date('Y'))->whereMonth('tanggal', "01")->sum('total_uang'),
             PenjualanBarang::whereYear('tanggal', date('Y'))->whereMonth('tanggal', "02")->sum('total_uang'),
@@ -51,6 +62,9 @@ class HomeController extends Controller
             'pembeli' => Pembeli::select('id')->get()->count(),
             'penjualan_chart' => implode(",",$penjualan_chart),
             'pembelian_chat' => implode(",",$pembelian_chat),
+            'tgl' => implode(', ', $tgl),
+            'beli' => implode(', ', $beli),
+            'uang' => implode(', ', $uang),
         ]);
     }
 
@@ -91,6 +105,7 @@ class HomeController extends Controller
             $data[] = [
                 'no' => $i,
                 'bulan' => date('d-m-Y', strtotime($day)),
+                'tgl' => date('dm', strtotime($day)),
                 'penjualan' => PenjualanBarang::whereDate('tanggal', $tanggal)->sum('total_barang'),                
             ];
         }

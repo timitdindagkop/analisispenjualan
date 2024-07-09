@@ -16,6 +16,6 @@ class PembelianBarang extends Model
 
     public function DetailPembelianBarang()
     {
-        return $this->hasMany(DetailPembelianBarang::class);
+        return $this->hasMany(DetailPembelianBarang::class, 'pembelianbarang_id', 'id');
     }
 }

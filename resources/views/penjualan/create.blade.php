@@ -75,7 +75,7 @@
                                             <th width="10%"><a href="#" class="btn-remove"><i class="mdi mdi mdi-delete"></i></a></th>
                                             <th width="30%">Barang</th>
                                             <th width="20%">Harga</th>
-                                            <th width="20%">Jumlah</th>
+                                            <th width="20%">Berat (Kg)</th>
                                             <th width="20%">Total</th>
                                         </tr>
                                     </thead>
@@ -112,6 +112,7 @@
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-lg btn-success" id="tombol-simpan" disabled>+ Simpan penjualan</button>
+                                <a href="" class="btn btn-lg btn-dark" id="cetak" target="_blank" style="display: none">Cetak nota</a>
                             </div>
                         </form>
                     </div>
@@ -313,6 +314,7 @@
                     dataType: "json",
                     success: function(response) {
                         removeall()
+                        console.log(response);
                         Swal.fire({title:"Selamat!",text:response.message,type:"success",confirmButtonColor:"#348cd4"});
                         $('#dp_cicilan').val('Rp. 0');
                         $('#barang').val('Pilih barang');
@@ -322,6 +324,9 @@
                         $('#dp_cicilan').attr("readonly", true);
                         $('#cicilan').prop("checked", false);
                         $('#tombol-simpan').html('+ Simpan penjualan');
+                        $('#tombol-simpan').hide();
+                        $('#cetak').show();
+                        $('#cetak').prop("href", "/print_pj/"+ response.idpenjualan);
                     }
                 });
             });

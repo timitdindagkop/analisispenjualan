@@ -24,6 +24,7 @@ route::post('/json_pe', [PembeliController::class, 'json'])->name('json_pe')->mi
 // route pembelian barang
 route::resource('/pb', PembelianBarangController::class)->middleware('auth');
 route::get('/print_pb/{id}', [PembelianBarangController::class, 'cetak'])->middleware('auth');
+route::get('/pb_detail/{id}', [PembelianBarangController::class, 'getDetail'])->middleware('auth');
 route::post('/json_pb', [PembelianBarangController::class, 'json'])->name('json_pb')->middleware('auth');
 
 // route penjualan barang

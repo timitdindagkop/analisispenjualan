@@ -14,22 +14,27 @@
                             <div class="col-md-12 mb-3">
                                 <label for="nama_suplier">Nama Suplier</label>
                                 <input type="text" class="form-control input" name="nama_suplier" id="nama_suplier" placeholder="Nama suplier">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="nama_barang">Nama Barang</label>
-                                <input type="text" class="form-control input" name="nama_barang" id="nama_barang" placeholder="Nama barang">
+                                <span id="errnama_suplier"></span>    
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="kode_barang">Kode Barang</label>
                                 <input type="text" class="form-control input" name="kode_barang" id="kode_barang" placeholder="Kode barang" maxlength="6">
+                                <span id="errkode_barang"></span>    
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="nama_barang">Nama Barang</label>
+                                <input type="text" class="form-control input" name="nama_barang" id="nama_barang" placeholder="Nama barang">
+                                <span id="errnama_barang"></span>    
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="harga_beli">Harga beli (Kiloan)</label>
                                 <input type="text" class="form-control input" name="harga_beli" id="harga_beli" placeholder="Harga beli">
+                                <span id="errharga_beli"></span>    
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="harga_jual">harga jual (Kiloan)</label>
                                 <input type="text" class="form-control input" name="harga_jual" id="harga_jual" placeholder="Harga jual">
+                                <span id="errharga_jual"></span>    
                             </div>
                             <input type="hidden" class="form-control input" name="stok_barang" id="stok_barang" placeholder="Stok" value="0" readonly>
                             {{-- <div class="col-md-2 mb-3">

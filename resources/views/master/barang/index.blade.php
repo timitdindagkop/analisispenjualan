@@ -45,7 +45,7 @@
                                             <th width="20%">Suplier</th>
                                             <th width="35%">Nama barang</th>
                                             <th width="20%">Harga Kiloan</th>
-                                            <th width="10%">Stok</th>
+                                            <th width="10%">Stok (Kg)</th>
                                             <th width="10%">#</th>
                                         </tr>
                                     </thead>
@@ -233,12 +233,15 @@
                     Swal.fire({title:"Selamat!",text:response.message,type:"success",confirmButtonColor:"#348cd4"})
                     table.ajax.reload();
                     document.getElementById("form_input").reset();
+                    $('.form-control').removeClass('is-invalid');
                     $('#modal_input').modal('hide');
                 },
                 error: function(err) {
                     let error = err.responseJSON;
                     $.each(error.errors, function(key, value){
                         $('#'+key).addClass('is-invalid');
+                        $('#err'+key).text(value);
+                        $('#err'+key).addClass('text-danger');
                     })
                 }
             })

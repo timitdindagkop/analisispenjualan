@@ -27,7 +27,7 @@
                 <div class="card-box">
                     <div class="media">
                         <div class="avatar-md bg-info rounded-circle mr-2">
-                            <i class="ion-logo-usd avatar-title font-26 text-white"></i>
+                            <i class="ion-md-cash avatar-title font-26 text-white"></i>
                         </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
@@ -111,7 +111,7 @@
                         <div class="card-body">
                             <h4>Selamat datang di toko Kedelai lil luk ma</h4>
                             <p>Anda dapat menggunakan aplikasi ini untuk menginput transaksi pembeli, semua data tercatat pada sistem mulai dari penjualan sampai dengan cicilan pembeli, pastikan semua data terinput dengan benar </p>
-                            <a href="{{ route('pj.create') }}" class="btn btn-lg btn-primary">Klik untuk mulai bertransaksi</a>    
+                            {{-- <a href="{{ route('pj.create') }}" class="btn btn-lg btn-primary">Klik untuk mulai bertransaksi</a>     --}}
                         </div>
                     </div>
                 </div>
@@ -129,16 +129,16 @@
     <script>
         const ctx = document.getElementById("lineChartapp");
         const data = {
-            labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"],
+            labels: [<?= $tgl ?>],
             datasets: [
                 {
                     label: 'Transaksi Penjualan barang',
-                    data: [<?= $penjualan_chart ?>],
+                    data: [<?= $uang ?>],
                     borderColor: 'rgb(45, 196, 192)',
                 },
                 {
                     label: 'Transaksi pembelian barang',
-                    data: [<?= $pembelian_chat ?>],
+                    data: [<?= $beli ?>],
                     borderColor: 'rgb(85, 136, 193)',
                 }
             ]

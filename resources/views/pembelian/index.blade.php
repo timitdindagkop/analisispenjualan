@@ -41,7 +41,7 @@
                                             <th width="5%">No</th>
                                             {{-- <th width="15%">Kode Pembelian</th> --}}
                                             <th width="20%">Tanggal</th>
-                                            <th width="30%">Total Barang (Kiloan)</th>
+                                            <th width="30%">Total Barang (Kg)</th>
                                             <th width="30%">Total Uang</th>
                                             <th width="10%">#</th>
                                         </tr>
@@ -58,6 +58,7 @@
         <!-- End Row -->
     </div>
     <!-- end container-fluid -->
+    @include('pembelian.modal_detail')
 @endsection
 @push('js')
     
@@ -98,13 +99,6 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                // {
-                //     "targets": "_all",
-                //     "defaultContent": "-",
-                //     "render": function(data, type, row, meta){
-                //     return row.id
-                //     }
-                // },
                 {
                     "targets": "_all",
                     "defaultContent": "-",
@@ -120,7 +114,16 @@
                     "targets": "_all",
                     "defaultContent": "-",
                     "render": function(data, type, row, meta){
-                    return row.total_barang
+                        var detail_html = "";
+                        var nomor = 1;
+                        if (Array.isArray(row.detail_pembelian_barang)) {
+                            row.detail_pembelian_barang.forEach(function(detail){
+                                detail_html += `Barang: ${nomor++}, Jumlah: ${detail.jumlah}<br>`;
+                            });
+                        } else {
+                            detail_html = "No details available";
+                        }
+                        return detail_html;
                     }
                 },
                 {
@@ -134,16 +137,37 @@
                     "targets": "_all",
                     "defaultContent": "-",
                     "render": function(data, type, row, meta){
-                    return `
-                        <div class="btn-group">
-                            <a href="{{ url('print_pb') }}/`+row.id+`" target="_blank" class="btn btn-sm btn-success edit-barang" title="Cetak laporan" data-id="`+row.id+`"><i class="mdi mdi mdi-printer"></i></a>
-                            <button class="btn btn-sm btn-danger hapusdata" title="Hapus data" data-id="`+row.id+`"><i class="mdi mdi mdi-delete-outline"></i></button>
-                        </div>
-                    `
+                    return `<a href="#" class="btn btn-sm btn-primary detail" data-id="`+row.id+`">Detail</a>`;
                     }
                 },
             ]
         });
+
+        $(document).on('click', '.detail', function(e) {
+            e.preventDefault();
+            let iddetail = $(this).data('id');
+            $.ajax({
+                url: "{{ url('pb_detail') }}/" + iddetail,
+                type: "GET",
+                dataType: 'json',
+                success: function(response) {
+                    $('#modalDetail').modal('show');
+                    $('#data-detail table tbody').html("");
+                    let datadetail = response.data;
+                    datadetail.forEach(function(detail) {
+                        $('#data-detail table tbody').append(`
+                            <tr>    
+                                <td>${detail.barang.nama_barang}</td>
+                                <td>Rp. ${rupiah(detail.harga)}</td>
+                                <td>${detail.jumlah}</td>
+                                <td>Rp. ${rupiah(detail.jumlah * detail.harga)}</td>
+                            </tr>
+                        `);
+                    });
+                }
+            });
+        });
+
 
         // belum fix
         $(document).on('click', '.hapusdata', function(e) {

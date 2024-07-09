@@ -58,7 +58,7 @@
                                             <th width="10%"><a href="#" class="btn-remove"><i class="mdi mdi mdi-delete"></i></a></th>
                                             <th width="30%">Barang</th>
                                             <th width="20%">Harga</th>
-                                            <th width="20%">Jumlah</th>
+                                            <th width="20%">Berat (Kg)</th>
                                             <th width="20%">Total</th>
                                         </tr>
                                     </thead>

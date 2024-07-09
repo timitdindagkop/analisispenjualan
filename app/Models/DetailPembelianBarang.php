@@ -14,11 +14,11 @@ class DetailPembelianBarang extends Model
  
     public function pembelianBarang()
     {
-        return $this->belongsTo(PembelianBarang::class);
+        return $this->belongsTo(PembelianBarang::class, 'id');
     }
 
     public function barang()
     {
-        return $this->belongsTo(Barang::class);
+        return $this->belongsTo(Barang::class, 'barang_id', 'id');
     }
 }

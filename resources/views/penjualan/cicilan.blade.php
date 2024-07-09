@@ -94,10 +94,10 @@
                                     <table class="table table-bordered mb-0">
                                         <thead>
                                             <tr class="text-center">
-                                                <th width="15%">Cicilan ke</th>
+                                                <th width="25%">Cicilan ke</th>
                                                 <th width="40%">Jumlah Uang</th>
                                                 <th width="35%">Tanggal</th>
-                                                <th width="10%">#</th>
+                                                {{-- <th width="10%">#</th> --}}
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -200,7 +200,6 @@
                                 <td>`+params.urutan_cicilan+`</td>
                                 <td>`+rupiah(params.jumlah_uang)+`</td>
                                 <td>`+hari+`/`+bulan+`/`+tahun+`</td>
-                                <td><a class="btn btn-sm btn-danger text-white hapusdata" data-id="`+params.id+`">Hapus</a></td>
                             </tr>`
                             $('#cicilan table tbody').append(body);
                         });    

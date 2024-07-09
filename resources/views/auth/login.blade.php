@@ -1,9 +1,5 @@
-
 <!DOCTYPE html>
 <html lang="en">
-
-    
-<!-- Mirrored from coderthemes.com/moltran/layouts/blue-vertical/pages-login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 13 Jun 2020 04:31:41 GMT -->
 <head>
         <meta charset="utf-8" />
         <title>{{ $title }}</title>

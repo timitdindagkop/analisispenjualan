@@ -40,7 +40,6 @@
                                     <thead>
                                         <tr>
                                             <th width="5%">No</th>
-                                            {{-- <th width="20%">Transaksi</th> --}}
                                             <th width="20%">Tanggal</th>
                                             <th width="30%">Total pembelian</th>
                                             <th width="25%">Total Barang (Kiloan)</th>
@@ -49,13 +48,19 @@
                                     <tbody>
                                         @foreach ($data as $item)
                                             <tr>
+                                                <?php $total_uang += $item->total_uang; ?>
+                                                <?php $total_barang += $item->total_barang; ?>
                                                 <td>{{ $loop->iteration }}</td>
-                                                {{-- <td>{{ $item->id }}</td> --}}
                                                 <td>{{ date('d-m-Y', strtotime($item->tanggal)) }}</td>
                                                 <td>Rp. {{ number_format($item->total_uang,0,',','.') }}</td>
                                                 <td>{{ $item->total_barang }}</td>
                                             </tr>
                                         @endforeach
+                                        <tr>
+                                            <td colspan="2" class="text-right"><strong>Total</strong></td>
+                                            <td><strong>Rp. {{ number_format($total_uang,0,',','.') }}</strong></td>
+                                            <td><strong>{{ $total_barang }}</strong></td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

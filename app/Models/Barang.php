@@ -13,4 +13,9 @@ class Barang extends Model
     
     protected $primaryKey = 'id';
     public $incrementing = false;
+
+    public function DetailPembelianBarang()
+    {
+        return $this->belongsTo(DetailPembelianBarang::class, 'id');
+    }
 }

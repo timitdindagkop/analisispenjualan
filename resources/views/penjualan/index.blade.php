@@ -161,14 +161,12 @@
                         return `<a href="{{ route('pj.index') }}/`+row.id+`" class="btn btn-sm btn-primary">Cicilan</a>
                         <div class="btn-group">
                             <a href="{{ url('print_pj') }}/`+row.id+`" target="_blank" class="btn btn-sm btn-success edit-barang" title="Cetak laporan" data-id="`+row.id+`"><i class="mdi mdi mdi-printer"></i></a>
-                            <button class="btn btn-sm btn-danger hapusdata" title="Hapus data" data-id="`+row.id+`"><i class="mdi mdi mdi-delete-outline"></i></button>
                         </div>
                     `
                     }else{
                         return `
                         <div class="btn-group">
-                            <a href="{{ url('print_pj') }}/`+row.id+`" target="_blank" class="btn btn-sm btn-success edit-barang" title="Cetak laporan" data-id="`+row.id+`"><i class="mdi mdi mdi-printer"></i></a>
-                            <button class="btn btn-sm btn-danger hapusdata" title="Hapus data" data-id="`+row.id+`"><i class="mdi mdi mdi-delete-outline"></i></button>
+                            <a href="{{ url('print_pj') }}/`+row.id+`" target="_blank" class="btn btn-sm btn-success edit-barang" title="Cetak laporan" data-id="`+row.id+`"><i class="mdi mdi mdi-printer"></i></a> 
                         </div>
                         `
                     }

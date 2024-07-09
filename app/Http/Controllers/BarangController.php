@@ -69,7 +69,26 @@ class BarangController extends Controller
 
     public function store(Request $request)
     {
-        $this->validasi($request);
+        // $this->validasi($request);
+        $request->validate(
+            [
+                'nama_suplier' => 'required',
+                'nama_barang' => 'required',
+                'kode_barang' => 'required|unique:barangs',
+                'harga_jual' => 'required',
+                'harga_beli' => 'required',
+                'stok_barang' => 'required'
+            ],
+            [
+                'nama_suplier.required' => 'Nama suplier tidak boleh kosong',
+                'nama_barang.required' => 'Nama barang tidak boleh kosong',
+                'kode_barang.required' => 'Kode barang tidak boleh kosong',
+                'kode_barang.unique' => 'Kode barang sudah ada',
+                'harga_jual.required' => 'Harga jual tidak boleh kosong',
+                'harga_beli.required' => 'Harga beli tidak boleh kosong',
+                'stok_barang.required' => 'Stok barang tidak boleh kosong',
+            ]
+        );
         // menyimpan data barang
         $barang = new Barang();
         $barang->id = Str::uuid()->toString();

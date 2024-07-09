@@ -50,10 +50,15 @@ class PenjualanBarangController extends Controller
         $orderBy = $columns[request()->input("order.0.column")];
         $data = PenjualanBarang::select('id', 'pembeli_id', 'tanggal', 'total_uang', 'total_barang', 'status_cicilan', 'status_bayar', 'dp_cicilan');
 
+        // Mencari berdasarkan nilai yang ada di input search
         if (request()->input("search.value")) {
-            $data = $data->where(function ($query) {
-                $query->whereRaw('total_uang like ? ', ['%' . request()->input("search.value") . '%'])
-                    ->orWhereRaw('total_barang like ? ', ['%' . request()->input("search.value") . '%']);
+            $searchValue = request()->input("search.value");
+            $data = $data->where(function ($query) use ($searchValue) {
+                $query->whereRaw('total_uang like ?', ['%' . $searchValue . '%'])
+                    ->orWhereRaw('total_barang like ?', ['%' . $searchValue . '%'])
+                    ->orWhereHas('pembeli', function($q) use ($searchValue) {
+                        $q->where('nama_pembeli', 'like', '%' . $searchValue . '%');
+                    });
             });
         }
 
@@ -149,7 +154,7 @@ class PenjualanBarangController extends Controller
             $history->save();
         }
         DB::table('detail_penjualan_barangs')->insert($data);
-        return response()->json(['message' => 'Pembelian barang berhasil dilakukan']);
+        return response()->json(['message' => 'Pembelian barang berhasil dilakukan', 'idpenjualan' => $penjualan->id]);
     }
 
     public function show($id)
@@ -211,7 +216,7 @@ class PenjualanBarangController extends Controller
         $cicilan_pembeli->jumlah_uang = $jumlah_uang;
         $cicilan_pembeli->save();
 
-        if (($penjualanBarang->dp_cicilan + $cicilan->sum('jumlah_uang') + $jumlah_uang) == $penjualanBarang->total_uang) {
+        if (($penjualanBarang->dp_cicilan + $cicilan->sum('jumlah_uang') + $jumlah_uang) >= $penjualanBarang->total_uang) {
             $penjualanBarang->status_bayar = "Lunas";
             $penjualanBarang->update();
         }

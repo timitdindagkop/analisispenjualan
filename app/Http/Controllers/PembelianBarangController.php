@@ -24,7 +24,7 @@ class PembelianBarangController extends Controller
     {
         $columns = ['id', 'tanggal', 'total_uang', 'total_barang'];
         $orderBy = $columns[request()->input("order.0.column")];
-        $data = PembelianBarang::select('id', 'tanggal', 'total_uang', 'total_barang');
+        $data = PembelianBarang::with('DetailPembelianBarang')->select('id', 'tanggal', 'total_uang', 'total_barang');
 
         if (request()->input("search.value")) {
             $data = $data->where(function ($query) {
@@ -114,6 +114,11 @@ class PembelianBarangController extends Controller
     public function update(Request $request, $id)
     {
         //
+    }
+
+    public function getDetail($id){
+        $data = DetailPembelianBarang::with('barang')->select('id', 'pembelianbarang_id', 'barang_id', 'jumlah', 'harga')->where('pembelianbarang_id', $id)->get();
+        return response()->json(['data' => $data]);
     }
 
     public function destroy($id)

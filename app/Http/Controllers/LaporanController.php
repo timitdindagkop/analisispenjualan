@@ -30,7 +30,9 @@ class LaporanController extends Controller
         
         return view('laporan.detail_perpembeli', [
             'title' => 'Detail pembelian',
-            'data' => $penjualan
+            'data' => $penjualan,
+            'total_uang' => 0,
+            'total_barang' => 0,
         ]);
     }
 
