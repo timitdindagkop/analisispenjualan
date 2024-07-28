@@ -48,7 +48,7 @@ class PenjualanBarangController extends Controller
     {
         $columns = ['id', 'pembeli_id', 'tanggal', 'total_uang', 'total_barang', 'status_cicilan', 'status_bayar', 'dp_cicilan'];
         $orderBy = $columns[request()->input("order.0.column")];
-        $data = PenjualanBarang::select('id', 'pembeli_id', 'tanggal', 'total_uang', 'total_barang', 'status_cicilan', 'status_bayar', 'dp_cicilan');
+        $data = PenjualanBarang::select('id', 'pembeli_id', 'tanggal', 'total_uang', 'total_barang', 'status_cicilan', 'status_bayar', 'dp_cicilan')->orderBy('tanggal', 'DESC');
 
         // Mencari berdasarkan nilai yang ada di input search
         if (request()->input("search.value")) {
@@ -89,7 +89,7 @@ class PenjualanBarangController extends Controller
     {
         return view('penjualan.create', [
             'title' => 'Create Penjualan Barang',
-            'pembeli' => Pembeli::select('id', 'nama_pembeli')->get(),
+            'pembeli' => Pembeli::select('id', 'nama_pembeli', 'alamat')->get(),
             'barang' => Barang::select('id', 'nama_barang')->get()
         ]);
     }

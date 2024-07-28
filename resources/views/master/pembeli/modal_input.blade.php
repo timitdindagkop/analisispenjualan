@@ -12,14 +12,17 @@
                     <div class="form-group">
                         <label for="nama_pembeli">Nama Pembeli</label>
                         <input type="text" class="form-control input" name="nama_pembeli" id="nama_pembeli" placeholder="Nama">
+                        <span id="errnama_pembeli"></span>    
                     </div>
                     <div class="form-group">
                         <label for="telepon">Telepon</label>
                         <input type="text" class="form-control input" name="telepon" id="telepon" placeholder="Telepon">
+                        <span id="errtelepon"></span>    
                     </div>
                     <div class="form-group">
                         <label for="alamat">Alamat</label>
                         <textarea class="form-control input" name="alamat" id="alamat" cols="10" rows="3" placeholder="Masukan alamat pembeli"></textarea>
+                        <span id="erralamat"></span>    
                     </div>
                 </form>
             </div>

@@ -53,7 +53,26 @@ class HomeController extends Controller
             PembelianBarang::whereYear('tanggal', date('Y'))->whereMonth('tanggal', "11")->sum('total_uang'),
             PembelianBarang::whereYear('tanggal', date('Y'))->whereMonth('tanggal', "12")->sum('total_uang'),
         ];
-        
+
+        $date = date('d');
+        $month = date('m');
+        $year = date('Y');
+        switch ($month) {
+            case '01': $bulan = "Januari"; break;
+            case '02': $bulan = "Feburari"; break;
+            case '03': $bulan = "Maret"; break;
+            case '04': $bulan = "April"; break;
+            case '05': $bulan = "Mei"; break;
+            case '06': $bulan = "Juni"; break;
+            case '07': $bulan = "Juli"; break;
+            case '08': $bulan = "Agustus"; break;
+            case '09': $bulan = "September"; break;
+            case '10': $bulan = "Oktober"; break;
+            case '11': $bulan = "November"; break;
+            case '12': $bulan = "Desember"; break;
+            default: $bulan = "Bulan"; break;
+        }
+
         return view('home.index', [
             'title' => 'Home',
             'barang' => Barang::select('id')->get()->count(),
@@ -65,6 +84,7 @@ class HomeController extends Controller
             'tgl' => implode(', ', $tgl),
             'beli' => implode(', ', $beli),
             'uang' => implode(', ', $uang),
+            'tanggal' => $date . ' ' . $bulan . ' ' . $year
         ]);
     }
 

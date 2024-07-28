@@ -24,7 +24,7 @@ class PembelianBarangController extends Controller
     {
         $columns = ['id', 'tanggal', 'total_uang', 'total_barang'];
         $orderBy = $columns[request()->input("order.0.column")];
-        $data = PembelianBarang::with('DetailPembelianBarang')->select('id', 'tanggal', 'total_uang', 'total_barang');
+        $data = PembelianBarang::with('DetailPembelianBarang')->select('id', 'tanggal', 'total_uang', 'total_barang')->orderBy('tanggal', 'DESC');
 
         if (request()->input("search.value")) {
             $data = $data->where(function ($query) {

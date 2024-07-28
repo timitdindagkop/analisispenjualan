@@ -59,7 +59,20 @@ class PembeliController extends Controller
 
     public function store(Request $request)
     {
-        $this->validasi($request);
+        // $this->validasi($request);
+        $request->validate(
+            [
+                'nama_pembeli' => 'required|unique:pembelis',
+                'alamat' => 'required',
+                'telepon' => 'required',
+            ],
+            [
+                'nama_pembeli.required' => 'Nama pembeli tidak boleh kosong',
+                'nama_pembeli.unique' => 'Nama sudah ada, silahkan tambahkan penanda',
+                'alamat.required' => 'alamat pembeli tidak boleh kosong',
+                'telepon.required' => 'Nomor telepon tidak boleh kosong',
+            ]
+        );
         // menyimpan data pembeli
         $pembeli = new Pembeli();
         $pembeli->id = Str::uuid()->toString();

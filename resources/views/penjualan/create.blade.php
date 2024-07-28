@@ -28,13 +28,13 @@
             <div class="col-lg-4">
                 <div class="card">
                     <div class="card-header bg-secondary">
-                        <h3 class="card-title text-white">Data Barang</h3>
+                        <h3 class="card-title text-white">Data Pembeli dan data barang</h3>
                     </div>
                     <div class="card-body">
                         <select name="pembeli" id="pembeli" class="form-control pembelis">
                             <option selected disabled>Pilih pembeli</option>
                             @foreach ($pembeli as $s)
-                                <option value="{{ $s->id }}">{{ $s->nama_pembeli }}</option>
+                                <option value="{{ $s->id }}">{{ $s->nama_pembeli }} - {{ $s->alamat }}</option>
                             @endforeach
                         </select>
 

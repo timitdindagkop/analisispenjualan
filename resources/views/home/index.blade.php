@@ -93,7 +93,7 @@
             <div class="col-xl-12 col-lg-12">
                 <div class="card card-border card-primary">
                     <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title text-primary">Penjualan dan pembelian</h3>
+                        <h3 class="card-title text-primary">Grafik penjualan dan pembelian kedelai di toko lil luk ma periode {{ $tanggal }}</h3>
                     </div>
                     <div class="card-body">
                         <canvas id="lineChartapp" data-type="Line" width="520" height="300"></canvas>
@@ -127,19 +127,21 @@
 
     <script src="/assets/js/pages/chartjs.init.js"></script>
     <script>
-        const ctx = document.getElementById("lineChartapp");
+        const ctx = document.getElementById("lineChartapp").getContext('2d');
         const data = {
             labels: [<?= $tgl ?>],
             datasets: [
                 {
-                    label: 'Transaksi Penjualan barang',
+                    label: 'Transaksi Penjualan kedelai perkilo',
                     data: [<?= $uang ?>],
                     borderColor: 'rgb(45, 196, 192)',
+                    fill: false
                 },
                 {
-                    label: 'Transaksi pembelian barang',
+                    label: 'Transaksi pembelian kedelai perkilo',
                     data: [<?= $beli ?>],
                     borderColor: 'rgb(85, 136, 193)',
+                    fill: false
                 }
             ]
         };
@@ -148,21 +150,28 @@
             type: 'line',
             data: data,
             options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            min: 0,
+                            callback: function(value) {
+                                return value + ' kg';
+                            }
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Kilogram'
+                        }
+                    }],
+                    xAxes: [{
+                        gridLines: {
+                            color: "rgba(0, 0, 0, 0)",
+                        }
+                    }]
+                },
                 display: true,
-            },
-            barValueSpacing: 20,
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        min: 0,
-                    },
-                }],
-                xAxes: [{
-                    gridLines: {
-                        color: "rgba(0, 0, 0, 0)",
-                    }
-                }]
+                barValueSpacing: 20,
             }
-        })
+        });
     </script>
 @endpush
