@@ -45,3 +45,4 @@ route::get('/lb', [LaporanController::class, 'labaBersih'])->middleware('auth');
 route::get('/json_lpb', [LaporanController::class, 'json_bulanan'])->middleware('auth');
 // analisis
 route::get('/an', [HomeController::class, 'analisis'])->name('analisis')->middleware('auth');
+route::get('/getAnalisis', [HomeController::class, 'getAnalisis'])->name('getAnalisis')->middleware('auth');

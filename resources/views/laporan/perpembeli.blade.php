@@ -35,7 +35,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-12">
-                                <p>Rekapan pembeli di hitung berdasarkan rekap bulan ini</p>
+                                <p>Rekapan pembeli di hitung berdasarkan rekap tahun ini</p>
                                 <table id="data-pembelianbarang" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                     <thead>
                                         <tr>

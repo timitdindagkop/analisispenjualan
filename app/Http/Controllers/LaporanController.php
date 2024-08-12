@@ -15,8 +15,8 @@ class LaporanController extends Controller
             $data[] = [
                 'id' => $p['id'],
                 'nama_pembeli' => $p->nama_pembeli,
-                'total_pembelian' => PenjualanBarang::where('pembeli_id', $p->id)->whereMonth('tanggal', date('m'))->whereYear('tanggal', date('Y'))->sum('total_uang'),
-                'total_barang' => PenjualanBarang::where('pembeli_id', $p->id)->whereMonth('tanggal', date('m'))->whereYear('tanggal', date('Y'))->sum('total_barang'),
+                'total_pembelian' => PenjualanBarang::where('pembeli_id', $p->id)->whereYear('tanggal', date('Y'))->sum('total_uang'),
+                'total_barang' => PenjualanBarang::where('pembeli_id', $p->id)->whereYear('tanggal', date('Y'))->sum('total_barang'),
             ];
         }
         return view('laporan.perpembeli', [
