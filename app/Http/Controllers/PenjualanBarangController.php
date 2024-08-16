@@ -137,8 +137,8 @@ class PenjualanBarangController extends Controller
                 'barang_id' => $request->barang_id[$key],
                 'harga' => $request->harga[$key],
                 'jumlah' => $request->jumlah[$key],
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s')
+                'created_at' => $request->tanggal . " " . date('H:i:s'),
+                'updated_at' => $request->tanggal . " " . date('H:i:s'),
             ];
             $barang = Barang::find($request->barang_id[$key]);
             $stok_barang = $barang->stok_barang;
